@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.grishka.appkit.views.FragmentRootLinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:id="@+id/appkit_loader_root"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="?colorM3Background">
+
+	<include layout="@layout/appkit_toolbar"/>
+
+	<FrameLayout
+		android:id="@+id/appkit_loader_content"
+		android:layout_width="match_parent"
+		android:layout_height="0px"
+		android:layout_weight="1">
+
+		<include layout="@layout/loading"
+			android:id="@+id/loading"/>
+
+		<ViewStub android:layout="?errorViewLayout"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:id="@+id/error"
+			android:visibility="gone"/>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:id="@+id/content_stub"/>
+
+		<TextView
+			android:id="@+id/dm_new_messages_pill"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="bottom|center_horizontal"
+			android:layout_marginBottom="12dp"
+			android:paddingHorizontal="16dp"
+			android:paddingVertical="10dp"
+			android:background="@drawable/bg_dm_message_bubble"
+			android:backgroundTint="?attr/colorM3Primary"
+			android:textColor="?attr/colorM3OnPrimary"
+			android:textAppearance="@style/m3_label_medium"
+			android:elevation="4dp"
+			android:visibility="gone"
+			tools:text="새 메시지 2개"
+			tools:visibility="visible"/>
+
+	</FrameLayout>
+
+	<LinearLayout
+		android:id="@+id/dm_compose_wrap"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:background="?attr/colorM3Surface">
+
+		<HorizontalScrollView
+			android:id="@+id/dm_media_preview_row"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:visibility="gone"
+			android:scrollbars="none"
+			android:paddingHorizontal="8dp"
+			android:paddingTop="8dp">
+
+			<LinearLayout
+				android:id="@+id/dm_media_preview_container"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"/>
+
+		</HorizontalScrollView>
+
+		<LinearLayout
+			android:id="@+id/dm_compose_bar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+			android:paddingHorizontal="8dp"
+			android:paddingVertical="6dp">
+
+			<ImageButton
+				android:id="@+id/dm_attach_button"
+				android:layout_width="48dp"
+				android:layout_height="48dp"
+				android:padding="12dp"
+				android:background="?android:attr/selectableItemBackgroundBorderless"
+				android:src="@drawable/ic_fluent_image_24_regular"
+				android:contentDescription="@string/dm_attach_image"/>
+
+			<ImageButton
+				android:id="@+id/dm_emoji_button"
+				android:layout_width="48dp"
+				android:layout_height="48dp"
+				android:padding="12dp"
+				android:background="?android:attr/selectableItemBackgroundBorderless"
+				android:src="@drawable/ic_fluent_emoji_24_regular"
+				android:contentDescription="@string/dm_emoji"/>
+
+			<EditText
+				android:id="@+id/dm_message_input"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:maxLines="5"
+				android:hint="@string/dm_message_hint"
+				android:inputType="textMultiLine|textCapSentences"
+				android:background="@null"
+				android:paddingHorizontal="12dp"/>
+
+			<ImageButton
+				android:id="@+id/dm_send_button"
+				android:layout_width="48dp"
+				android:layout_height="48dp"
+				android:padding="12dp"
+				android:background="?android:attr/selectableItemBackgroundBorderless"
+				android:src="@drawable/ic_fluent_send_24_regular"
+				android:contentDescription="@string/dm_send_button"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/dm_emoji_keyboard_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"/>
+
+	</LinearLayout>
+</me.grishka.appkit.views.FragmentRootLinearLayout>

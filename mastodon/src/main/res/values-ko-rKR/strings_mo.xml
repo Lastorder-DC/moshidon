@@ -1,4 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="mo_color_palette_nord">노르드</string>
+	<string name="mo_color_palette_black_and_white">흑백</string>
+	<string name="mo_enable_dividers">게시물 구분선 표시</string>
+	<string name="mo_relocate_publish_button">게시 버튼 위치 이동</string>
+	<string name="mo_hide_compose_button_while_scrolling_setting">스크롤 중 작성 버튼 숨기기</string>
+	<string name="mo_welcome_text">시작하려면 아래에 홈 서버의 도메인 이름을 입력하세요.</string>
 
+	<string name="mo_personal_note">이 프로필에 대한 메모 추가</string>
+	<string name="mo_personal_note_saved">메모 저장됨</string>
+	<string name="mo_personal_note_confirm">메모 변경 확인</string>
+	<string name="mo_personal_note_update_failed">메모 저장 실패</string>
+	<string name="mo_settings_contribute">자커마스 앱에 기여하기</string>
+	<string name="mo_update_available">자커마스 %s 버전을 다운로드할 수 있습니다.</string>
+	<string name="mo_update_ready">자커마스 %s 버전이 다운로드되어 설치할 준비가 되었습니다.</string>
+	<string name="mo_no_image_desc_title">이미지 설명 없음</string>
+	<string name="mo_no_image_desc">포함된 이미지에 설명이 없습니다. 시각 장애가 있는 분들도 참여할 수 있도록 설명을 추가하는 것을 고려해주세요.</string>
+	<string name="mo_emoji_recent">최근 사용</string>
+	<string name="mo_clear_recent_emoji">최근 사용한 이모지 지우기</string>
+	<string name="mo_filtered">필터링됨: %s</string>
+	<string name="mo_disable_relocate_publish_button_to_enable_customization">사용자 지정을 활성화하려면 "게시 버튼 위치 이동"을 비활성화하세요</string>
+	<string name="mo_disable_reminder_to_add_alt_text">대체 텍스트 추가 알림 끄기</string>
+	<string name="mo_add_custom_server_local_timeline">사용자 지정 서버의 로컬 타임라인 추가</string>
+	<string name="mo_notification_action_replied">%s 님의 게시물에 성공적으로 답장했습니다</string>
+	<string name="mo_change_default_reply_visibility_to_unlisted">답장 기본 공개 범위를 \'조용히\'로 변경</string>
+	<string name="mo_composer_behavior">작성 화면 동작</string>
+	<string name="mo_notification_management_settings">알림 관리</string>
+	<string name="mo_open_camera">사진 촬영</string>
+	<string name="mo_camera_not_available">사용 가능한 카메라가 없습니다!</string>
+	<string name="mo_muted_conversation_successfully">대화를 뮤트했습니다</string>
+	<string name="mo_unmuted_conversation_successfully">대화 뮤트를 해제했습니다</string>
+	<string name="mo_muting">뮤트하는 중…</string>
+	<string name="mo_unmuting">뮤트 해제하는 중…</string>
+	<string name="mo_mute_conversation">대화 뮤트</string>
+	<string name="mo_unmute_conversation">대화 뮤트 해제</string>
+	<string name="mo_confirm_to_mute_conversation">이 대화를 뮤트하시겠습니까?</string>
+	<string name="mo_confirm_to_unmute_conversation">이 대화의 뮤트를 해제하시겠습니까?</string>
+	<string name="mo_mute_hashtag">해시태그 뮤트</string>
+	<string name="mo_mute_hashtag_explanation_muted_home">홈 타임라인에서 이 해시태그가 언급된 게시물을 보지 않습니다.</string>
+	<string name="mo_mute_hashtag_explanation_discreet">다른 사람은 당신이 이 해시태그를 뮤트했다는 것을 알 수 없습니다.</string>
+	<string name="mo_mute_hashtag_explanation_search">다른 타임라인이나 검색을 통해서는 이 해시태그의 게시물을 계속 찾을 수 있습니다.</string>
+	<string name="mo_unmute_hashtag">해시태그 뮤트 해제</string>
+	<string name="mo_confirm_to_mute_hashtag">이 해시태그를 뮤트하시겠습니까?</string>
+	<string name="mo_confirm_to_unmute_hashtag">이 해시태그의 뮤트를 해제하시겠습니까?</string>
+
+	<!--    accessibility labels-->
+	<string name="mo_poll_option_add">새 투표 항목 추가</string>
+	<string name="mo_fab_compose">작성</string>
+	<string name="mo_sending_error">게시 오류</string>
+
+	<!--    duration labels-->
+	<string name="mo_mute_label">기간:</string>
+	<string name="mo_duration_indefinite">무기한</string>
+	<string name="mo_duration_minutes_5">5분</string>
+	<string name="mo_duration_minutes_30">30분</string>
+	<string name="mo_duration_hours_1">1시간</string>
+	<string name="mo_duration_hours_6">6시간</string>
+	<string name="mo_duration_days_1">1일</string>
+	<string name="mo_duration_days_3">3일</string>
+	<string name="mo_duration_days_7">7일</string>
+
+	<string name="mo_share_open_url">앱에서 열기</string>
+
+	<string name="mo_instance_view_info">서버 정보 보기</string>
+	<string name="mo_instance_admin">관리자</string>
+	<string name="mo_instance_contact">연락처</string>
+	<string name="mo_instance_users">사용자</string>
+	<string name="mo_instance_status">상태</string>
+	<string name="mo_instance_registration">가입</string>
+	<string name="mo_instance_registration_open">열림</string>
+	<string name="mo_instance_registration_approval">승인 필요</string>
+	<string name="mo_instance_info_open_timeline">로컬 타임라인</string>
+	<string name="mo_instance_info_moderated_servers">모더레이션된 서버</string>
+	<string name="mo_severity_silence">침묵됨</string>
+	<string name="mo_severity_suspend">차단됨</string>
+	<string name="mo_filter_notifications">알림 필터링</string>
+
+	<!--    Settings summaries-->
+	<string name="mo_setting_true_black_summary">AMOLED 화면에서 전력을 절약할 수 있습니다</string>
+	<string name="mo_setting_marquee_summary">말줄임표로 표시되는 제목의 스크롤을 비활성화합니다</string>
+	<string name="mo_setting_uniform_summary">모든 알림에 앱 아이콘 사용</string>
+	<string name="mo_setting_reduced_motion_summary">상호작용 애니메이션 비활성화</string>
+	<string name="mo_setting_play_gif_summary">아바타와 이모지의 GIF 자동 재생</string>
+	<string name="mo_setting_remote_follower_summary">다른 서버의 팔로워 표시</string>
+	<string name="mo_setting_relocate_publish_summary">게시 버튼을 하단 바로 이동</string>
+	<string name="mo_setting_default_reply_privacy_summary">답장은 탐색 기능에서 제외됩니다</string>
+	<string name="mo_setting_interaction_count_summary">타임라인에서 게시물과 상호작용한 사람 수 표시</string>
+	<string name="mo_setting_disable_swipe_summary">스와이프로 보고 있는 타임라인 변경</string>
+	<string name="mo_setting_haptic_feedback_summary">게시물과 상호작용할 때 진동</string>
+	<string name="mo_swap_bookmark_with_reblog_summary">알림에서 게시물을 북마크하거나 부스트</string>
+	<string name="mo_settings_show_posts_without_alt_summary">모든 타임라인에서 숨겨지지만, 스레드와 알림에서는 표시할 수 있습니다</string>
+	<string name="mo_settings_remove_tracking_params_summary">링크에서 추적 정보 제거</string>
+
+	<!--  Settings  -->
+	<string name="mo_notification_audience_settings">알림 대상</string>
+	<string name="mo_settings_show_posts_without_alt">대체 텍스트가 없는 미디어 게시물 표시</string>
+	<string name="mo_double_tap_to_search">두 번 탭하여 검색 열기</string>
+	<string name="mo_double_tap_to_swipe_between_tabs">두 번 탭하여 탭 간 이동</string>
+	<string name="mo_haptic_feedback">햅틱 피드백</string>
+	<string name="mo_swap_bookmark_with_reblog">북마크와 부스트 동작 바꾸기</string>
+	<string name="mo_download_latest_nightly_release">최신 Nightly 릴리스 다운로드</string>
+	<string name="mo_load_remote_followers">원격 프로필의 팔로우 및 팔로워 불러오기</string>
+	<string name="mo_mention_reblogger_automatically">답장 시 게시물을 부스트한 계정 자동 멘션</string>
+	<string name="mo_confirm_unfollow_title">팔로우 해제</string>
+	<string name="mo_confirm_unfollow">%s 님을 팔로우 해제하시겠습니까?</string>
+	<string name="mo_recent_emoji_cleared">최근 사용한 이모지를 지웠습니다</string>
+	<string name="mo_show_media_preview">타임라인에 미디어 미리보기 표시</string>
+	<string name="mo_notification_filter_reset">기본값으로 재설정</string>
+	<string name="mo_settings_unifiedpush_warning">UnifiedPush가 활성화되지 않음</string>
+	<string name="mo_settings_unifiedpush_warning_no_distributors">설치된 UnifiedPush 배포자가 없습니다. 알림을 받을 수 없습니다.</string>
+	<string name="mo_settings_unifiedpush_warning_disabled">UnifiedPush가 활성화되지 않았습니다. 알림을 받을 수 없습니다.</string>
+	<string name="mo_settings_unifiedpush_enable">활성화</string>
+	<string name="mo_settings_remove_tracking_params">프라이빗 링크</string>
+	<string name="mo_settings_enhance_text_size">텍스트 크기 확대</string>
+	<string name="mo_settings_enhance_text_size_summary">앱의 텍스트를 더 크게 만듭니다</string>
+
+	<!--	Temporary Strings. They exist in strings_sk.xml, but are not available on Megalodon's weblate-->
+	<string name="mo_muted_accounts">뮤트한 계정</string>
+	<string name="mo_blocked_accounts">차단한 계정</string>
+	<string name="mo_mute_notifications">이 사용자의 알림을 숨길까요?</string>
+	<string name="import_settings_confirm">설정을 가져오시겠습니까?</string>
+	<string name="import_settings_confirm_body">현재 설정과 타임라인이 모두 덮어씌워집니다! 이 작업은 되돌릴 수 없습니다.</string>
+	<string name="import_settings_failed">설정 가져오기 실패</string>
+	<string name="export_settings_share">설정 내보내기</string>
+	<string name="export_settings_fail">설정 내보내기 실패</string>
+	<string name="export_settings_title">설정 내보내기</string>
+	<string name="export_settings_summary">로그인한 모든 계정의 설정과 타임라인 내보내기</string>
+	<string name="import_settings_title">설정 가져오기</string>
+	<string name="import_settings_summary">이전에 내보낸 설정과 타임라인 가져오기</string>
+
+	<!-- error display item	-->
+	<string name="mo_error_display_title">게시물 표시 실패</string>
+	<string name="mo_error_display_text">이 게시물을 불러오는 중 문제가 발생했습니다. 문제가 계속되면 오류 세부 정보와 함께 이슈 페이지에 신고해주세요.</string>
+	<string name="mo_error_display_copy_error_details">세부 정보 복사</string>
+	<string name="mo_trending_link_read">읽기</string>
 </resources>

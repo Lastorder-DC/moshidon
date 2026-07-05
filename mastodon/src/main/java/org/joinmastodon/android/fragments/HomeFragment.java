@@ -31,6 +31,7 @@ import org.joinmastodon.android.api.session.AccountSessionManager;
 import org.joinmastodon.android.events.NotificationsMarkerUpdatedEvent;
 import org.joinmastodon.android.events.StatusDisplaySettingsChangedEvent;
 import org.joinmastodon.android.fragments.discover.DiscoverFragment;
+import org.joinmastodon.android.fragments.dm.DmChatRoomListFragment;
 import org.joinmastodon.android.fragments.onboarding.OnboardingFollowSuggestionsFragment;
 import org.joinmastodon.android.model.Account;
 import org.joinmastodon.android.model.Notification;
@@ -64,6 +65,7 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 	private NotificationsFragment notificationsFragment;
 	private DiscoverFragment discoverFragment;
 	private ProfileFragment profileFragment;
+	private DmChatRoomListFragment dmChatRoomListFragment;
 	private TabBar tabBar;
 	private View tabBarWrap;
 	private ImageView tabBarAvatar;
@@ -93,6 +95,8 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 			discoverFragment.setArguments(args);
 			notificationsFragment=new NotificationsFragment();
 			notificationsFragment.setArguments(args);
+			dmChatRoomListFragment=new DmChatRoomListFragment();
+			dmChatRoomListFragment.setArguments(args);
 			args=new Bundle(args);
 			args.putParcelable("profileAccount", Parcels.wrap(AccountSessionManager.getInstance().getAccount(accountID).self));
 			args.putBoolean("noAutoLoad", true);
@@ -129,12 +133,14 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 			tabBar.findViewById(R.id.tab_home_pill).setBackground(null);
 			tabBar.findViewById(R.id.tab_search_pill).setBackground(null);
 			tabBar.findViewById(R.id.tab_notifications_pill).setBackground(null);
+			tabBar.findViewById(R.id.tab_dm_pill).setBackground(null);
 			tabBar.findViewById(R.id.tab_profile_pill).setBackgroundResource(R.drawable.bg_tab_profile);
 
 			View[] tabs={
 					tabBar.findViewById(R.id.tab_home),
 					tabBar.findViewById(R.id.tab_search),
 					tabBar.findViewById(R.id.tab_notifications),
+					tabBar.findViewById(R.id.tab_dm),
 					tabBar.findViewById(R.id.tab_profile)
 			};
 
@@ -149,6 +155,7 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 			tabBar.findViewById(R.id.tab_home_label).setVisibility(View.GONE);
 			tabBar.findViewById(R.id.tab_search_label).setVisibility(View.GONE);
 			tabBar.findViewById(R.id.tab_notifications_label).setVisibility(View.GONE);
+			tabBar.findViewById(R.id.tab_dm_label).setVisibility(View.GONE);
 			tabBar.findViewById(R.id.tab_profile_label).setVisibility(View.GONE);
 		}
 
@@ -168,6 +175,7 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 					.add(me.grishka.appkit.R.id.fragment_wrap, homeTabFragment)
 					.add(me.grishka.appkit.R.id.fragment_wrap, discoverFragment).hide(discoverFragment)
 					.add(me.grishka.appkit.R.id.fragment_wrap, notificationsFragment).hide(notificationsFragment)
+					.add(me.grishka.appkit.R.id.fragment_wrap, dmChatRoomListFragment).hide(dmChatRoomListFragment)
 					.add(me.grishka.appkit.R.id.fragment_wrap, profileFragment).hide(profileFragment)
 					.commit();
 
@@ -196,6 +204,7 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 		discoverFragment=(DiscoverFragment) getChildFragmentManager().getFragment(savedInstanceState, "searchFragment");
 		notificationsFragment=(NotificationsFragment) getChildFragmentManager().getFragment(savedInstanceState, "notificationsFragment");
 		profileFragment=(ProfileFragment) getChildFragmentManager().getFragment(savedInstanceState, "profileFragment");
+		dmChatRoomListFragment=(DmChatRoomListFragment) getChildFragmentManager().getFragment(savedInstanceState, "dmChatRoomListFragment");
 		currentTab=savedInstanceState.getInt("selectedTab");
 		tabBar.selectTab(currentTab);
 		Fragment current=fragmentForTab(currentTab);
@@ -238,6 +247,7 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 		homeTabFragment.onApplyWindowInsets(topOnlyInsets);
 		discoverFragment.onApplyWindowInsets(topOnlyInsets);
 		notificationsFragment.onApplyWindowInsets(topOnlyInsets);
+		dmChatRoomListFragment.onApplyWindowInsets(topOnlyInsets);
 		profileFragment.onApplyWindowInsets(topOnlyInsets);
 	}
 
@@ -248,6 +258,8 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 			return discoverFragment;
 		}else if(tab==R.id.tab_notifications){
 			return notificationsFragment;
+		}else if(tab==R.id.tab_dm){
+			return dmChatRoomListFragment;
 		}else if(tab==R.id.tab_profile){
 			return profileFragment;
 		}
@@ -278,7 +290,12 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 	}
 
 	private void maybeTriggerLoading(Fragment newFragment){
-		if(newFragment instanceof LoaderFragment lf){
+		if(newFragment instanceof DmChatRoomListFragment dmf){
+			// Unlike most tabs, refetch every time it's opened - there's no live streaming for
+			// DMs, so this is the only way to see new rooms/messages without a manual pull-refresh.
+			if(!dmf.dataLoading)
+				dmf.loadData();
+		}else if(newFragment instanceof LoaderFragment lf){
 			if(!lf.loaded && !lf.dataLoading)
 				lf.loadData();
 		}else if(newFragment instanceof DiscoverFragment){
@@ -337,6 +354,7 @@ public class HomeFragment extends AppKitFragment implements OnBackPressedListene
 		if (discoverFragment.isAdded()) getChildFragmentManager().putFragment(outState, "searchFragment", discoverFragment);
 		if (notificationsFragment.isAdded()) getChildFragmentManager().putFragment(outState, "notificationsFragment", notificationsFragment);
 		if (profileFragment.isAdded()) getChildFragmentManager().putFragment(outState, "profileFragment", profileFragment);
+		if (dmChatRoomListFragment.isAdded()) getChildFragmentManager().putFragment(outState, "dmChatRoomListFragment", dmChatRoomListFragment);
 	}
 
 	@Override

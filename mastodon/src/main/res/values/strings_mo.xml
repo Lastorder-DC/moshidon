@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="mo_app_name" translatable="false">Moshidon</string>
-    <string name="mo_app_name_debug" translatable="false">Moshidon Debug</string>
-    <string name="mo_app_name_nightly" translatable="false">Moshidon Nightly</string>
+    <string name="mo_app_name" translatable="false">자커마스</string>
+    <string name="mo_app_name_debug" translatable="false">자커마스 Debug</string>
+    <string name="mo_app_name_nightly" translatable="false">자커마스 Nightly</string>
 
     <string name="mo_color_palette_nord">Nord</string>
     <string name="mo_color_palette_black_and_white">Black and White</string>
-    <string name="mo_app_username" translatable="false">\@moshidon</string>
+    <string name="mo_app_username" translatable="false">\@occm</string>
     <string name="mo_enable_dividers">Show post dividers</string>
     <string name="mo_relocate_publish_button">Relocate publish button</string>
     <string name="mo_hide_compose_button_while_scrolling_setting">Hide compose button while scrolling</string>
@@ -19,7 +19,7 @@
 	<string name="mo_personal_note_saved">Note saved</string>
     <string name="mo_personal_note_confirm">Confirm changes to note</string>
     <string name="mo_personal_note_update_failed">Failed to save note</string>
-    <string name="mo_settings_contribute">Contribute to Moshidon</string>
+    <string name="mo_settings_contribute">Contribute to 자커마스</string>
     <string name="mo_update_available">Moshidon %s is ready to download.</string>
     <string name="mo_update_ready">Moshidon %s is downloaded and ready to install.</string>
     <string name="mo_no_image_desc_title">No Image description</string>
@@ -84,8 +84,8 @@
     <string name="mo_severity_suspend">Blocked</string>
 	<string name="mo_filter_notifications">Filter notifications</string>
 
-	<string name="mo_repo_url" translatable="false">https://github.com/LucasGGamerM/moshidon</string>
-	<string name="mo_donate_url" translatable="false">https://github.com/sponsors/LucasGGamerM</string>
+	<string name="mo_repo_url" translatable="false">https://github.com/Lastorder-DC/moshidon</string>
+	<string name="mo_donate_url" translatable="false">https://github.com/sponsors/Lastorder-DC</string>
 
 <!--    Settings summaries-->
     <string name="mo_setting_true_black_summary">Might save power on AMOLED displays</string>

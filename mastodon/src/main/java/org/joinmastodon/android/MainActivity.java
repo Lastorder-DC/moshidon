@@ -31,6 +31,7 @@ import org.joinmastodon.android.api.session.AccountSession;
 import org.joinmastodon.android.api.session.AccountSessionManager;
 import org.joinmastodon.android.events.TakePictureRequestEvent;
 import org.joinmastodon.android.fragments.ComposeFragment;
+import org.joinmastodon.android.fragments.dm.DmChatRoomFragment;
 import org.joinmastodon.android.fragments.HomeFragment;
 import org.joinmastodon.android.fragments.ProfileFragment;
 import org.joinmastodon.android.fragments.ThreadFragment;
@@ -96,7 +97,16 @@ public class MainActivity extends FragmentStackActivity implements ProvidesAssis
 		super.onNewIntent(intent);
 		AccountSessionManager.getInstance().maybeUpdateLocalInfo();
 		if (intent.hasExtra("fromExternalShare")) showFragmentForExternalShare(intent.getExtras());
-		else if (intent.getBooleanExtra("fromNotification", false)) {
+		else if (intent.getBooleanExtra("fromDmNotification", false)) {
+			String accountID=intent.getStringExtra("accountID");
+			try{
+				AccountSessionManager.getInstance().getAccount(accountID);
+			}catch(IllegalStateException x){
+				return;
+			}
+			Log.d(TAG, "onNewIntent: fromDmNotification, dmRoomUuid extra="+intent.getStringExtra("dmRoomUuid"));
+			showFragmentForDmNotification(intent.getStringExtra("dmRoomUuid"), accountID);
+		}else if (intent.getBooleanExtra("fromNotification", false)) {
 			String accountID=intent.getStringExtra("accountID");
 			try{
 				AccountSessionManager.getInstance().getAccount(accountID);
@@ -174,6 +184,14 @@ public class MainActivity extends FragmentStackActivity implements ProvidesAssis
 		Bundle args = new Bundle();
 		args.putBoolean("noTransition", true);
 		UiUtils.showFragmentForNotification(this, notification, accountID, args);
+	}
+
+	private void showFragmentForDmNotification(String roomUuid, String accountID){
+		Bundle args = new Bundle();
+		args.putString("account", accountID);
+		args.putString("roomUuid", roomUuid);
+		args.putBoolean("noTransition", true);
+		Nav.go(this, DmChatRoomFragment.class, args);
 	}
 
 	private void showFragmentForExternalShare(Bundle args) {
@@ -272,8 +290,16 @@ public class MainActivity extends FragmentStackActivity implements ProvidesAssis
 		}
 
 		boolean fromNotification = intent.getBooleanExtra("fromNotification", false);
+		boolean fromDmNotification = intent.getBooleanExtra("fromDmNotification", false);
 		boolean hasNotification = intent.hasExtra("notification");
-		if(fromNotification){
+		if(fromDmNotification){
+			String accountID=intent.getStringExtra("accountID");
+			try{
+				session=AccountSessionManager.getInstance().getAccount(accountID);
+			}catch(IllegalStateException x){
+				session=AccountSessionManager.getInstance().getLastActiveAccount();
+			}
+		}else if(fromNotification){
 			String accountID=intent.getStringExtra("accountID");
 			try{
 				session=AccountSessionManager.getInstance().getAccount(accountID);
@@ -309,8 +335,16 @@ public class MainActivity extends FragmentStackActivity implements ProvidesAssis
 			}
 
 			boolean fromNotification = intent.getBooleanExtra("fromNotification", false);
+			boolean fromDmNotification = intent.getBooleanExtra("fromDmNotification", false);
 			boolean hasNotification = intent.hasExtra("notification");
-			if(fromNotification){
+			if(fromDmNotification){
+				String accountID=intent.getStringExtra("accountID");
+				try{
+					session=AccountSessionManager.getInstance().getAccount(accountID);
+				}catch(IllegalStateException x){
+					session=AccountSessionManager.getInstance().getLastActiveAccount();
+				}
+			}else if(fromNotification){
 				String accountID=intent.getStringExtra("accountID");
 				try{
 					session=AccountSessionManager.getInstance().getAccount(accountID);
@@ -325,7 +359,10 @@ public class MainActivity extends FragmentStackActivity implements ProvidesAssis
 			args.putString("account", session.getID());
 			Fragment fragment=session.activated ? new HomeFragment() : new AccountActivationFragment();
 			fragment.setArguments(args);
-			if(fromNotification && hasNotification){
+			if(fromDmNotification){
+				Log.d(TAG, "restartHomeFragment: fromDmNotification, dmRoomUuid extra="+intent.getStringExtra("dmRoomUuid"));
+				showFragmentForDmNotification(intent.getStringExtra("dmRoomUuid"), session.getID());
+			} else if(fromNotification && hasNotification){
 				// Parcelables might not be compatible across app versions so this protects against possible crashes
 				// when a notification was received, then the app was updated, and then the user opened the notification
 				try{

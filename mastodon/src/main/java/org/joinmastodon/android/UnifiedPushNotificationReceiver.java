@@ -78,8 +78,10 @@ public class UnifiedPushNotificationReceiver extends MessagingReceiver{
 
 		if (message.getDecrypted()) {
 			// If the mastodon server supports the standard webpush, we can directly use the content
-			Log.d(TAG, "Push message correctly decrypted");
-			PushNotification pn = MastodonAPIController.gson.fromJson(new String(message.getContent(), Charsets.UTF_8), PushNotification.class);
+			String rawJson = new String(message.getContent(), Charsets.UTF_8);
+			Log.d(TAG, "Push message correctly decrypted, raw JSON: " + rawJson);
+			PushNotification pn = MastodonAPIController.gson.fromJson(rawJson, PushNotification.class);
+			Log.d(TAG, "Parsed PushNotification: isDm=" + pn.isDm + " dmRoomUuid=" + pn.dmRoomUuid + " notificationId=" + pn.notificationId);
 			new GetNotificationByID(pn.notificationId)
 					.setCallback(new Callback<>(){
 						@Override
@@ -95,7 +97,10 @@ public class UnifiedPushNotificationReceiver extends MessagingReceiver{
 					.exec(instance);
 		} else {
 			// else, we have to sync with the server
-			Log.d(TAG, "Server doesn't support standard webpush, fetching one notification");
+			// NOTE: this fallback path fetches the latest *real* Mastodon Notification and can
+			// never represent a DM (DMs aren't Notification records) - if a DM push ever ends up
+			// here, it's because message.getDecrypted() was false, not because of anything DM-specific.
+			Log.w(TAG, "Server doesn't support standard webpush (or decryption failed), fetching one notification instead - this path can't show DMs correctly");
 			fetchOneNotification(context, account, (notif) -> () -> new PushNotificationReceiver().notifyUnifiedPush(context, account, notif));
 		}
 	}

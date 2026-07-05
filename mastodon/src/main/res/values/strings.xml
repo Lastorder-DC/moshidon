@@ -2,6 +2,19 @@
 <resources>
 	<string name="app_name" translatable="false">Mastodon</string>
 
+	<string name="dm_send_button">Send</string>
+	<string name="dm_message_hint">Message…</string>
+	<string name="dm_chat_rooms_title">Direct Messages</string>
+	<string name="dm_tab_label">DM</string>
+	<string name="dm_no_messages_yet">No messages yet</string>
+	<string name="dm_pending_invite">Invited</string>
+	<string name="dm_new_messages">%d new messages</string>
+	<string name="dm_attach_image">Attach image</string>
+	<string name="dm_emoji">Emoji</string>
+	<string name="dm_remove_attachment">Remove attachment</string>
+	<string name="welcome_occm_title">Welcome</string>
+	<string name="welcome_occm_body">Sign in with your occm.cc account.</string>
+
 	<string name="log_in">Log in</string>
 	<string name="next">Next</string>
 	<string name="loading_instance">Retrieving server info…</string>

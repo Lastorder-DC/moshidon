@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:gravity="center_vertical"
+	android:paddingHorizontal="16dp"
+	android:paddingVertical="10dp"
+	android:background="?android:attr/selectableItemBackground">
+
+	<ImageView
+		android:id="@+id/dm_room_avatar"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:layout_marginEnd="12dp"
+		android:importantForAccessibility="no"
+		tools:src="#0f0"/>
+
+	<LinearLayout
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/dm_room_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textAppearance="@style/m3_title_small"
+			android:textColor="?colorM3OnSurface"
+			tools:text="yumeka2"/>
+
+		<TextView
+			android:id="@+id/dm_room_last_message"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="2dp"
+			android:singleLine="true"
+			android:ellipsize="end"
+			android:textAppearance="@style/m3_body_medium"
+			android:textColor="?colorM3Secondary"
+			tools:text="마지막 메시지 미리보기입니다"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:orientation="vertical"
+		android:gravity="end">
+
+		<TextView
+			android:id="@+id/dm_room_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="12sp"
+			android:textColor="?colorM3Secondary"
+			tools:text="14:32"/>
+
+		<View
+			android:id="@+id/dm_room_unread_dot"
+			android:layout_width="10dp"
+			android:layout_height="10dp"
+			android:layout_marginTop="6dp"
+			android:background="@drawable/bg_dm_message_bubble"
+			android:backgroundTint="?attr/colorM3Primary"/>
+	</LinearLayout>
+</LinearLayout>

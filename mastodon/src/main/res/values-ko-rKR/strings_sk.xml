@@ -414,4 +414,22 @@
     <string name="sk_icon_thunderstorm">번개구름</string>
     <string name="sk_icon_rain">비</string>
     <string name="sk_icon_snowflake">눈꽃</string>
+    <string name="sk_add_note">개인 메모 추가</string>
+    <string name="sk_button_mutuals">맞팔로우</string>
+    <string name="sk_confirm_changes">변경 사항 확인</string>
+    <string name="sk_crash_log_copied">충돌 로그 복사됨</string>
+    <string name="sk_delete_note">개인 메모 삭제</string>
+    <string name="sk_open_post_preview">게시물 미리보기</string>
+    <string name="sk_poll_hide_results">결과 숨기기</string>
+    <string name="sk_poll_multiple_choice">다중 선택</string>
+    <string name="sk_poll_show_results">결과 표시</string>
+    <string name="sk_posted">%s 님이 게시함</string>
+    <string name="sk_post_preview">미리보기</string>
+    <string name="sk_private_note_confirm_delete">%s 님에 대한 개인 메모를 삭제하시겠습니까?</string>
+    <string name="sk_private_note_hint">이 프로필에 대한 개인 메모 추가</string>
+    <string name="sk_private_note_update_failed">메모 저장 실패</string>
+    <string name="sk_settings_copy_crash_log">최근 충돌 로그 복사</string>
+    <string name="sk_settings_crash_log_unavailable">아직 없음…</string>
+    <string name="sk_settings_prefix_replies_always">누구에게 답장하든</string>
+    <string name="sk_settings_prefix_replies_to_others">다른 사람에게 답장할 때만</string>
 </resources>

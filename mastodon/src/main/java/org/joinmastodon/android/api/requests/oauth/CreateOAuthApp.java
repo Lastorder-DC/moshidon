@@ -11,7 +11,7 @@ public class CreateOAuthApp extends MastodonAPIRequest<Application>{
 	}
 
 	private static class Request{
-		public String clientName="Moshidon";
+		public String clientName="자커마스";
 		public String redirectUris=AccountSessionManager.REDIRECT_URI;
 		public String scopes=AccountSessionManager.SCOPE;
 		public String website="https://github.com/LucasGGamerM/moshidon";

@@ -319,7 +319,7 @@ public class SettingsNotificationsFragment extends BaseSettingsFragment<Void>{
 			bannerText.setText(R.string.notifications_disabled_in_system);
 			bannerButton.setText(R.string.open_system_notification_settings);
 			bannerButton.setOnClickListener(v->openSystemNotificationSettings());
-		}else if(BuildConfig.BUILD_TYPE.equals("fdroidRelease") && !useUnifiedPush){
+		}else if(!PushSubscriptionManager.arePushNotificationsAvailable() && !useUnifiedPush){
 			bannerAdapter.setVisible(true);
 			bannerIcon.setImageResource(R.drawable.ic_fluent_warning_24_filled);
 			bannerTitle.setVisibility(View.VISIBLE);

@@ -80,7 +80,7 @@ public class AccountLocalPreferences{
 		recentLanguages=fromJson(prefs.getString("recentLanguages", null), recentLanguagesType, new ArrayList<>());
 		bottomEncoding=prefs.getBoolean("bottomEncoding", false);
 		defaultContentType=enumValue(ContentType.class, prefs.getString("defaultContentType", instance.map(Instance::isIceshrimp).orElse(false) ? ContentType.MISSKEY_MARKDOWN.name() : ContentType.PLAIN.name()));
-		contentTypesEnabled=prefs.getBoolean("contentTypesEnabled", instance.map(i->!i.isIceshrimp()).orElse(false));
+		contentTypesEnabled=prefs.getBoolean("contentTypesEnabled", false);
 		timelines=fromJson(prefs.getString("timelines", null), timelinesType, TimelineDefinition.getDefaultTimelines(session.getID()));
 		localOnlySupported=prefs.getBoolean("localOnlySupported", false);
 		glitchInstance=prefs.getBoolean("glitchInstance", false);

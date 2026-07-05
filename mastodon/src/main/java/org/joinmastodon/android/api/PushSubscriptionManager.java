@@ -94,22 +94,11 @@ public class PushSubscriptionManager{
 	}
 
 	public static void tryRegisterFCM(){
-		deviceToken=getPrefs().getString("deviceToken", null);
-		int tokenVersion=getPrefs().getInt("version", 0);
-		if(!TextUtils.isEmpty(deviceToken) && tokenVersion==BuildConfig.VERSION_CODE){
-			registerAllAccountsForPush(false);
-			return;
-		}
-		Log.i(TAG, "tryRegisterFCM: no token found or app was updated. Trying to get push token...");
-		Intent intent = new Intent("com.google.iid.TOKEN_REQUEST");
-		intent.setPackage(GSF_PACKAGE);
-		intent.putExtra(EXTRA_APPLICATION_PENDING_INTENT,
-				PendingIntent.getBroadcast(MastodonApp.context, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE));
-		intent.putExtra(EXTRA_SENDER, FCM_SENDER_ID);
-		intent.putExtra(EXTRA_SUBTYPE, FCM_SENDER_ID);
-		intent.putExtra(EXTRA_SCOPE, "*");
-		intent.putExtra("kid", KID_VALUE);
-		MastodonApp.context.sendBroadcast(intent);
+		// This build's push relay (app.joinmastodon.org/relay-to/fcm) belongs to Mastodon gGmbH's
+		// own Firebase project, which doesn't recognize this fork's applicationId - so a token from
+		// it can never actually be delivered through. Push here works only through UnifiedPush
+		// (see UnifiedPushHelper / SettingsNotificationsFragment), so don't bother requesting one.
+		Log.d(TAG, "tryRegisterFCM: skipped, this build only supports UnifiedPush");
 	}
 
 	private static SharedPreferences getPrefs(){
@@ -122,9 +111,10 @@ public class PushSubscriptionManager{
 
 
 	public void registerAccountForPush(PushSubscription subscription){
-		// this function is used for registering push notifications using FCM
-		// to avoid NonFreeNet in F-Droid, this registration is disabled in it
-		// see https://github.com/LucasGGamerM/moshidon/issues/206 for more context
+		// this function is used for registering push notifications using FCM.
+		// deviceToken is always empty in this fork now (see tryRegisterFCM), so this
+		// always falls through to the skip branch below - kept as-is since it's harmless
+		// dead weight and matches upstream Moshidon's structure if this ever needs reverting.
 		if(BuildConfig.BUILD_TYPE.equals("fdroidRelease") || TextUtils.isEmpty(deviceToken)){
 			Log.d(TAG, "Skipping registering for FCM push notifications");
 			return;

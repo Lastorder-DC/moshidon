@@ -29,6 +29,7 @@ import org.joinmastodon.android.api.requests.statuses.SetStatusFavorited;
 import org.joinmastodon.android.api.requests.statuses.SetStatusReblogged;
 import org.joinmastodon.android.api.session.AccountSession;
 import org.joinmastodon.android.api.session.AccountSessionManager;
+import org.joinmastodon.android.events.DmPushReceivedEvent;
 import org.joinmastodon.android.model.Account;
 import org.joinmastodon.android.model.Mention;
 import org.joinmastodon.android.model.NotificationAction;
@@ -101,19 +102,25 @@ public class PushNotificationReceiver extends BroadcastReceiver{
 						}
 						String accountID=account.getID();
 						PushNotification pn=AccountSessionManager.getInstance().getAccount(accountID).getPushSubscriptionManager().decryptNotification(k, p, s);
-						new GetNotificationByID(pn.notificationId)
-								.setCallback(new Callback<>(){
-									@Override
-									public void onSuccess(org.joinmastodon.android.model.Notification result){
-										MastodonAPIController.runInBackground(()->PushNotificationReceiver.this.notify(context, pn, accountID, result));
-									}
+						if(pn.isDm){
+							// DM chat messages aren't real Notification records, so there's nothing to
+							// fetch by ID here - just show it directly from the push payload fields.
+							MastodonAPIController.runInBackground(()->PushNotificationReceiver.this.notify(context, pn, accountID, null));
+						}else{
+							new GetNotificationByID(pn.notificationId)
+									.setCallback(new Callback<>(){
+										@Override
+										public void onSuccess(org.joinmastodon.android.model.Notification result){
+											MastodonAPIController.runInBackground(()->PushNotificationReceiver.this.notify(context, pn, accountID, result));
+										}
 
-									@Override
-									public void onError(ErrorResponse error){
-										MastodonAPIController.runInBackground(()->PushNotificationReceiver.this.notify(context, pn, accountID, null));
-									}
-								})
-								.exec(accountID);
+										@Override
+										public void onError(ErrorResponse error){
+											MastodonAPIController.runInBackground(()->PushNotificationReceiver.this.notify(context, pn, accountID, null));
+										}
+									})
+									.exec(accountID);
+						}
 					}catch(Exception x){
 						Log.w(TAG, x);
 					}
@@ -201,10 +208,19 @@ public class PushNotificationReceiver extends BroadcastReceiver{
 		Drawable avatar=ImageCache.getInstance(context).get(new UrlImageLoaderRequest(pn.icon, V.dp(50), V.dp(50)));
 		Intent contentIntent=new Intent(context, MainActivity.class);
 		contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		contentIntent.putExtra("fromNotification", true);
 		contentIntent.putExtra("accountID", accountID);
-		if(notification!=null){
-			contentIntent.putExtra("notification", Parcels.wrap(notification));
+		Log.d(TAG, "notify: building contentIntent, pn.isDm="+pn.isDm+" pn.dmRoomUuid="+pn.dmRoomUuid);
+		if(pn.isDm){
+			contentIntent.putExtra("fromDmNotification", true);
+			contentIntent.putExtra("dmRoomUuid", pn.dmRoomUuid);
+			// Let any currently-open DM screen refresh right away instead of
+			// waiting for its next poll tick (up to 10-20s away).
+			E.post(new DmPushReceivedEvent(accountID, pn.dmRoomUuid));
+		}else{
+			contentIntent.putExtra("fromNotification", true);
+			if(notification!=null){
+				contentIntent.putExtra("notification", Parcels.wrap(notification));
+			}
 		}
 		builder.setContentTitle(pn.title)
 				.setContentText(pn.body)
@@ -219,7 +235,7 @@ public class PushNotificationReceiver extends BroadcastReceiver{
 				.setColor(context.getColor(R.color.shortcut_icon_background));
 
 		if (!GlobalUserPreferences.uniformNotificationIcon) {
-			builder.setSmallIcon(switch (pn.notificationType) {
+			builder.setSmallIcon(pn.isDm ? R.drawable.ic_fluent_chat_24_filled : switch (pn.notificationType) {
 				case FAVORITE -> GlobalUserPreferences.likeIcon ? R.drawable.ic_fluent_heart_24_filled : R.drawable.ic_fluent_star_24_filled;
 				case REBLOG -> R.drawable.ic_fluent_arrow_repeat_all_24_filled;
 				case FOLLOW -> R.drawable.ic_fluent_person_add_24_filled;

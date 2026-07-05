@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="mo_app_name" translatable="false">Moshidon</string>
+    <string name="mo_app_name" translatable="false">자커마스</string>
     <string name="mo_color_palette_nord">Nord</string>
-    <string name="mo_app_username" translatable="false">\@moshidon</string>
+    <string name="mo_app_username" translatable="false">\@occm</string>
     <string name="mo_disable_dividers">Beitrags-Trennlinien deaktivieren</string>
     <string name="mo_relocate_publish_button">Veröffentlichen-Schaltfläche verschieben</string>
     <string name="mo_hide_compose_button_while_scrolling_setting">Veröffentlichen Schaltfläche beim scrollen ausblenden</string>

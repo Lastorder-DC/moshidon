@@ -166,6 +166,50 @@
 		</LinearLayout>
 
 		<LinearLayout
+			android:id="@+id/tab_dm"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:layout_marginEnd="8dp"
+			android:paddingTop="12dp"
+			android:paddingBottom="16dp"
+			android:tooltipText="@string/dm_chat_rooms_title"
+			android:orientation="vertical">
+
+			<FrameLayout
+				android:id="@+id/tab_dm_pill"
+				android:layout_width="match_parent"
+				android:layout_height="32dp"
+				android:background="@drawable/bg_tabbar_tab"
+				android:contentDescription="@string/dm_chat_rooms_title">
+
+				<ImageView
+					android:layout_width="24dp"
+					android:layout_height="24dp"
+					android:layout_gravity="center"
+					android:scaleType="center"
+					android:importantForAccessibility="no"
+					android:tint="@color/tab_bar_icon"
+					android:src="@drawable/ic_fluent_chat_24_selector"/>
+
+			</FrameLayout>
+
+			<TextView
+				android:id="@+id/tab_dm_label"
+				style="@style/m3_label_medium"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:layout_marginTop="4dp"
+				android:textColor="@color/m3_on_surface_selector"
+				android:tag="label"
+				android:ellipsize="end"
+				android:maxLines="1"
+				android:text="@string/dm_tab_label" />
+
+		</LinearLayout>
+
+		<LinearLayout
 			android:id="@+id/tab_profile"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"

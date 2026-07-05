@@ -23,6 +23,12 @@ public class PushNotification extends BaseModel{
 	public String title;
 	@RequiredField
 	public String body;
+	/**
+	 * Set on push payloads coming from custom DM chat rooms (not real Mastodon notifications).
+	 * Not a {@link RequiredField} so ordinary notification payloads that never send it still parse fine.
+	 */
+	public boolean isDm;
+	public String dmRoomUuid;
 
 	public static PushNotification fromNotification(Context context, AccountSession account, Notification notification){
 		PushNotification pushNotification = new PushNotification();
