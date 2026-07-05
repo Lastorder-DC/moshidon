@@ -447,7 +447,6 @@
 	<!-- %s is the app name (Mastodon, key app_name). I made it a placeholder so everything Just Works™ with forks -->
 	<string name="about_app">About %s</string>
 	<string name="default_post_language">Default post language</string>
-	<string name="settings_alt_text_reminders">Add alt text reminders</string>
 	<string name="settings_confirm_unfollow">Ask before unfollowing someone</string>
 	<string name="settings_confirm_boost">Ask before boosting</string>
 	<string name="settings_confirm_delete_post">Ask before deleting posts</string>
@@ -501,20 +500,6 @@
 		<item quantity="one">%d hour ago</item>
 		<item quantity="other">%d hours ago</item>
 	</plurals>
-	<string name="alt_text_reminder_title">Media missing alt text</string>
-	<plurals name="alt_text_reminder_x_images">
-		<item quantity="one">%s of your images is missing alt text. Post anyway?</item>
-		<item quantity="other">%s of your images are missing alt text. Post anyway?</item>
-	</plurals>
-	<plurals name="alt_text_reminder_x_attachments">
-		<item quantity="one">%s of your media attachments is missing alt text. Post anyway?</item>
-		<item quantity="other">%s of your media attachments are missing alt text. Post anyway?</item>
-	</plurals>
-	<string name="count_one">One</string>
-	<string name="count_two">Two</string>
-	<string name="count_three">Three</string>
-	<string name="count_four">Four</string>
-	<string name="alt_text_reminder_post_anyway">Post</string>
 	<!-- %s is the username -->
 	<string name="unfollow_confirmation">Unfollow %s?</string>
 	<string name="filter_active">Active</string>

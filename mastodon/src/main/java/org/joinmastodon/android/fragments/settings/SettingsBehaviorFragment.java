@@ -30,7 +30,7 @@ import androidx.annotation.StringRes;
 
 public class SettingsBehaviorFragment extends BaseSettingsFragment<Void> implements HasAccountID{
 	private ListItem<Void> languageItem;
-	private CheckableListItem<Void> altTextItem, playGifsItem, confirmUnfollowItem, confirmBoostItem, confirmDeleteItem;
+	private CheckableListItem<Void> playGifsItem, confirmUnfollowItem, confirmBoostItem, confirmDeleteItem;
 	private MastodonLanguage postLanguage;
 	private ComposeLanguageAlertViewController.SelectedOption newPostLanguage;
 
@@ -55,7 +55,6 @@ public class SettingsBehaviorFragment extends BaseSettingsFragment<Void> impleme
 
 		List<ListItem<Void>> items = new ArrayList<>(List.of(
 				customTabsItem=new ListItem<>(getString(R.string.settings_custom_tabs), getString(GlobalUserPreferences.useCustomTabs ? R.string.in_app_browser : R.string.system_browser), R.drawable.ic_fluent_open_24_regular, this::onCustomTabsClick),
-				altTextItem=new CheckableListItem<>(R.string.settings_alt_text_reminders, 0, CheckableListItem.Style.SWITCH, GlobalUserPreferences.altTextReminders, R.drawable.ic_fluent_image_alt_text_24_regular, i->toggleCheckableItem(altTextItem)),
 				showPostsWithoutAltItem=new CheckableListItem<>(R.string.mo_settings_show_posts_without_alt, R.string.mo_settings_show_posts_without_alt_summary, CheckableListItem.Style.SWITCH, GlobalUserPreferences.showPostsWithoutAlt, R.drawable.ic_fluent_eye_tracking_on_24_regular, i->toggleCheckableItem(showPostsWithoutAltItem)),
 				playGifsItem=new CheckableListItem<>(R.string.settings_gif, R.string.mo_setting_play_gif_summary, CheckableListItem.Style.SWITCH, GlobalUserPreferences.playGifs, R.drawable.ic_fluent_gif_24_regular, i->toggleCheckableItem(playGifsItem)),
 				overlayMediaItem=new CheckableListItem<>(R.string.sk_settings_continues_playback, R.string.sk_settings_continues_playback_summary, CheckableListItem.Style.SWITCH, GlobalUserPreferences.overlayMedia, R.drawable.ic_fluent_play_circle_hint_24_regular, i->toggleCheckableItem(overlayMediaItem)),
@@ -208,7 +207,6 @@ public class SettingsBehaviorFragment extends BaseSettingsFragment<Void> impleme
 	protected void onHidden(){
 		super.onHidden();
 		GlobalUserPreferences.overlayMedia=overlayMediaItem.checked;
-		GlobalUserPreferences.altTextReminders=altTextItem.checked;
 		GlobalUserPreferences.confirmUnfollow=confirmUnfollowItem.checked;
 		GlobalUserPreferences.confirmBoost=confirmBoostItem.checked;
 		GlobalUserPreferences.confirmDeletePost=confirmDeleteItem.checked;

@@ -3,7 +3,6 @@ package org.joinmastodon.android.updater;
 import android.app.Activity;
 import android.content.Intent;
 
-import org.joinmastodon.android.BuildConfig;
 
 public abstract class GithubSelfUpdater{
 	private static GithubSelfUpdater instance;
@@ -21,7 +20,11 @@ public abstract class GithubSelfUpdater{
 	}
 
 	public static boolean needSelfUpdating(){
-		return BuildConfig.BUILD_TYPE.equals("githubRelease") || BuildConfig.BUILD_TYPE.equals("debug") || BuildConfig.BUILD_TYPE.equals("nightly");
+		// Disabled: this checked LucasGGamerM/moshidon(-nightly) upstream releases, which are a
+		// different app entirely and always "newer" than our own version dates - always showing a
+		// bogus update prompt. Re-enable once this fork has its own release pipeline to point at,
+		// or leave disabled for good once distributed via Play Store (which handles updates itself).
+		return false;
 	}
 
 	public abstract void checkForUpdates();

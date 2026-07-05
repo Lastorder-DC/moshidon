@@ -345,12 +345,7 @@ public class ComposeFragment extends MastodonToolbarFragment implements OnBackPr
 			publishButtonRelocated=view.findViewById(R.id.publish);
 //			publishButton.setText(editingStatus==null || redraftStatus ? R.string.publish : R.string.save);
 //			publishButton.setEllipsize(TextUtils.TruncateAt.END);
-			publishButtonRelocated.setOnClickListener(v -> {
-				if(GlobalUserPreferences.altTextReminders && editingStatus==null)
-					checkAltTextsAndPublish();
-				else
-					publish();
-			});
+			publishButtonRelocated.setOnClickListener(v -> publish());
 			publishButtonRelocated.setVisibility(View.VISIBLE);
 
 			draftsBtn=view.findViewById(R.id.drafts_btn);
@@ -881,12 +876,7 @@ public class ComposeFragment extends MastodonToolbarFragment implements OnBackPr
 
 		if(!GlobalUserPreferences.relocatePublishButton){
 			publishButton = wrap.findViewById(R.id.publish_btn);
-			publishButton.setOnClickListener(v -> {
-				if(GlobalUserPreferences.altTextReminders && editingStatus==null)
-					checkAltTextsAndPublish();
-				else
-					publish();
-			});
+			publishButton.setOnClickListener(v -> publish());
 			publishButton.setVisibility(View.VISIBLE);
 
 			draftsBtn = wrap.findViewById(R.id.drafts_btn);
@@ -934,10 +924,7 @@ public class ComposeFragment extends MastodonToolbarFragment implements OnBackPr
 			publishButton.post(()->publishButton.setMinimumWidth(publishButton.getWidth()));
 
 		(GlobalUserPreferences.relocatePublishButton ? publishButtonRelocated : publishButton).setOnClickListener(v->{
-			Consumer<Boolean> draftCheckComplete=(isDraft)->{
-				if(GlobalUserPreferences.altTextReminders && !isDraft) checkAltTextsAndPublish();
-				else publish();
-			};
+			Consumer<Boolean> draftCheckComplete=(isDraft)->publish();
 
 			boolean isAlreadyDraft=scheduledAt!=null && scheduledAt.isAfter(DRAFTS_AFTER_INSTANT);
 			if(editingStatus!=null && scheduledAt!=null && isAlreadyDraft) {
@@ -1129,28 +1116,6 @@ public class ComposeFragment extends MastodonToolbarFragment implements OnBackPr
 			}).exec(accountID);
 		} else {
 			callback.run();
-		}
-	}
-
-	private void checkAltTextsAndPublish(){
-		int count=mediaViewController.getMissingAltTextAttachmentCount();
-		if(count==0){
-			publish();
-		}else{
-			String msg=getResources().getQuantityString(mediaViewController.areAllAttachmentsImages() ? R.plurals.alt_text_reminder_x_images : R.plurals.alt_text_reminder_x_attachments,
-					count, switch(count){
-						case 1 -> getString(R.string.count_one);
-						case 2 -> getString(R.string.count_two);
-						case 3 -> getString(R.string.count_three);
-						case 4 -> getString(R.string.count_four);
-						default -> String.valueOf(count);
-					});
-			new M3AlertDialogBuilder(getActivity())
-					.setTitle(R.string.alt_text_reminder_title)
-					.setMessage(msg)
-					.setPositiveButton(R.string.alt_text_reminder_post_anyway, (dlg, item)->publish())
-					.setNegativeButton(R.string.cancel, null)
-					.show();
 		}
 	}
 

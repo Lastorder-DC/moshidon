@@ -430,7 +430,6 @@
 	<string name="settings_server_explanation">개요, 규칙, 관리자</string>
 	<string name="about_app">%s 정보</string>
 	<string name="default_post_language">기본 게시물 언어</string>
-	<string name="settings_alt_text_reminders">대체 텍스트 추가 알림</string>
 	<string name="settings_confirm_unfollow">팔로우 해제 전에 확인</string>
 	<string name="settings_confirm_boost">부스트 전에 확인</string>
 	<string name="settings_confirm_delete_post">게시물 삭제 전에 확인</string>
@@ -461,12 +460,6 @@
 	<string name="settings_hide_sensitive_media">민감함으로 표시된 미디어 가리기</string>
 	<string name="settings_show_interaction_counts">게시물 상호작용 수</string>
 	<string name="settings_show_emoji_in_names">표시 이름에 커스텀 이모지 사용</string>
-	<string name="alt_text_reminder_title">대체 텍스트가 없는 미디어</string>
-	<string name="count_one">하나</string>
-	<string name="count_two">둘</string>
-	<string name="count_three">셋</string>
-	<string name="count_four">넷</string>
-	<string name="alt_text_reminder_post_anyway">게시</string>
 	<string name="unfollow_confirmation">%s 님을 팔로우 해제하시겠습니까?</string>
 	<string name="filter_active">활성</string>
 	<string name="filter_inactive">비활성</string>
@@ -653,12 +646,6 @@
 	<string name="post_pinned">게시물이 고정되었습니다</string>
 	<string name="post_unpinned">게시물 고정이 해제되었습니다</string>
 
-	<plurals name="alt_text_reminder_x_attachments">
-		<item quantity="other">미디어 첨부 파일 %s개에 대체 텍스트가 없습니다. 그래도 게시하시겠습니까?</item>
-	</plurals>
-	<plurals name="alt_text_reminder_x_images">
-		<item quantity="other">이미지 %s개에 대체 텍스트가 없습니다. 그래도 게시하시겠습니까?</item>
-	</plurals>
 	<plurals name="cant_add_more_than_x_attachments">
 		<item quantity="other">미디어 첨부 파일은 %d개보다 많이 추가할 수 없습니다</item>
 	</plurals>

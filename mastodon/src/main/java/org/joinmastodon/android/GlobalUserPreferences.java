@@ -36,7 +36,7 @@ public class GlobalUserPreferences{
 
 	public static boolean playGifs;
 	public static boolean useCustomTabs;
-	public static boolean altTextReminders, confirmUnfollow, confirmBoost, confirmDeletePost;
+	public static boolean confirmUnfollow, confirmBoost, confirmDeletePost;
 	public static ThemePreference theme;
 
 	// MEGALODON
@@ -113,7 +113,6 @@ public class GlobalUserPreferences{
 		playGifs=prefs.getBoolean("playGifs", true);
 		useCustomTabs=prefs.getBoolean("useCustomTabs", true);
 		theme=ThemePreference.values()[prefs.getInt("theme", 0)];
-		altTextReminders=prefs.getBoolean("altTextReminders", true);
 		confirmUnfollow=prefs.getBoolean("confirmUnfollow", true);
 		confirmBoost=prefs.getBoolean("confirmBoost", false);
 		confirmDeletePost=prefs.getBoolean("confirmDeletePost", true);
@@ -188,7 +187,6 @@ public class GlobalUserPreferences{
 				.putBoolean("playGifs", playGifs)
 				.putBoolean("useCustomTabs", useCustomTabs)
 				.putInt("theme", theme.ordinal())
-				.putBoolean("altTextReminders", altTextReminders)
 				.putBoolean("confirmUnfollow", confirmUnfollow)
 				.putBoolean("confirmBoost", confirmBoost)
 				.putBoolean("confirmDeletePost", confirmDeletePost)
@@ -302,7 +300,6 @@ public class GlobalUserPreferences{
 
 		// migrate global preferences
 		SharedPreferences prefs=getPrefs();
-		altTextReminders=!prefs.getBoolean("disableAltTextReminder", false);
 		confirmBoost=prefs.getBoolean("confirmBeforeReblog", false);
 		toolbarMarquee=!prefs.getBoolean("disableMarquee", false);
 

@@ -20,7 +20,6 @@
 	<string name="mo_clear_recent_emoji">최근 사용한 이모지 지우기</string>
 	<string name="mo_filtered">필터링됨: %s</string>
 	<string name="mo_disable_relocate_publish_button_to_enable_customization">사용자 지정을 활성화하려면 "게시 버튼 위치 이동"을 비활성화하세요</string>
-	<string name="mo_disable_reminder_to_add_alt_text">대체 텍스트 추가 알림 끄기</string>
 	<string name="mo_add_custom_server_local_timeline">사용자 지정 서버의 로컬 타임라인 추가</string>
 	<string name="mo_notification_action_replied">%s 님의 게시물에 성공적으로 답장했습니다</string>
 	<string name="mo_change_default_reply_visibility_to_unlisted">답장 기본 공개 범위를 \'조용히\'로 변경</string>
