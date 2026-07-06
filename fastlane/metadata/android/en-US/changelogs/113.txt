@@ -1,0 +1,1 @@
+Improved DM notification delivery reliability, updated to target the latest Android version (SDK 35), minor bug fixes
