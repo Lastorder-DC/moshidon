@@ -164,10 +164,10 @@ dependencies {
 	androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 
-// Only applied when a google-services.json has actually been placed - see the setup guide.
-// Deliberately conditional: the Gradle plugins applied from that file hard-fail the whole
-// build if google-services.json is missing, which would break every variant (including
-// fdroid/github builds that should never need it) on a fresh checkout.
-if (file("google-services.json").exists() && file("firebase.gradle").exists()) {
+// firebase.gradle handles its own google-services.json conditionals internally (dependencies
+// don't need that file, only the plugins applied from it do) - deleted entirely by F-Droid's
+// prebuild step (see the setup guide), which is the only reason this needs a file-exists guard
+// at all.
+if (file("firebase.gradle").exists()) {
 	apply from: 'firebase.gradle'
 }

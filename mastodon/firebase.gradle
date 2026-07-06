@@ -23,15 +23,22 @@ dependencies {
 	}
 }
 
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
+// The dependencies above don't need google-services.json at all - only the google-services and
+// Crashlytics *plugins* do, and they hard-fail without it. Keep them conditional so
+// debug/nightly/playRelease still compile (with working Firebase classes, just uninitialized
+// until real config is provided) on a checkout that hasn't added the file yet, like a fresh CI
+// run - see the setup guide.
+if (file("google-services.json").exists()) {
+	apply plugin: 'com.google.gms.google-services'
+	apply plugin: 'com.google.firebase.crashlytics'
 
-// githubRelease/fdroidRelease share playRelease's applicationId, so without this the
-// Crashlytics plugin would try to upload a mapping file for them too even though they
-// have no Firebase dependency at all - and F-Droid's builder has no network access.
-android.buildTypes.githubRelease.firebaseCrashlytics {
-	mappingFileUploadEnabled = false
-}
-android.buildTypes.fdroidRelease.firebaseCrashlytics {
-	mappingFileUploadEnabled = false
+	// githubRelease/fdroidRelease share playRelease's applicationId, so without this the
+	// Crashlytics plugin would try to upload a mapping file for them too even though they
+	// have no Firebase dependency at all - and F-Droid's builder has no network access.
+	android.buildTypes.githubRelease.firebaseCrashlytics {
+		mappingFileUploadEnabled = false
+	}
+	android.buildTypes.fdroidRelease.firebaseCrashlytics {
+		mappingFileUploadEnabled = false
+	}
 }
