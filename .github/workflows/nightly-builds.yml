@@ -1,8 +1,8 @@
-name: Nightly builds
+name: Nightly build
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "occm" ]
   workflow_dispatch:
 
 jobs:
@@ -10,62 +10,49 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
-#    - name: Checkout Appkit Repo
-#      uses: actions/checkout@v3
-#      with:
-#        repository: grishka/appkit
-#
-#    - name: set up JDK 17
-#      uses: actions/setup-java@v3
-#      with:
-#        java-version: '17'
-#        distribution: 'corretto'
-#        cache: gradle
-#
-#    - name: Comment out signing config in appkits gradle file
-#      run: |
-#        sed -i 's/sign publishing\.publications\.release/\/\/ sign publishing.publications.release/' appkit/maven-push.gradle
-#
-#    - name: Grant execute permission for gradlew for Appkit
-#      run: chmod +x gradlew
-#
-#    - name: Compile appkit
-#      run: ./gradlew publishToMavenLocal
-      
     - uses: actions/checkout@v3
+
     - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'corretto'
         cache: gradle
-    
+
     - name: Get current date
       id: date
       run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    
+
     - name: Decode Keystore
-      id: decode_keystore
       uses: timheuer/base64-to-file@v1
       with:
-        fileName: 'nightly_keystore.jks'  
+        fileName: 'nightly_keystore.jks'
         fileDir: './mastodon/keystore/'
         encodedString: ${{ secrets.KEYSTORE }}
-    
+
     - name: Build with Gradle
       run: ./gradlew assembleNightly
       env:
-          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          CURRENT_DATE: ${{ steps.date.outputs.date }}
-      
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v4
+        SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+        SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+        CURRENT_DATE: ${{ steps.date.outputs.date }}
+
+    # Reuses a single rolling "nightly" pre-release/tag instead of piling up a new GitHub Release
+    # (or Actions artifact, which expires and needs a login to download) on every push - each run
+    # replaces the previous nightly asset in place.
+    - name: Publish to rolling nightly pre-release
+      uses: softprops/action-gh-release@v2
       with:
-       name: moshidon-nightly.apk
-       path: ./mastodon/build/outputs/apk/nightly/moshidon-nightly.apk
+        tag_name: nightly
+        name: Nightly build (${{ steps.date.outputs.date }})
+        prerelease: true
+        target_commitish: ${{ github.sha }}
+        files: mastodon/build/outputs/apk/nightly/occm-nightly.apk

@@ -2,6 +2,20 @@ plugins {
 	id 'com.android.application'
 }
 
+// signingConfigs/buildTypes blocks below run unconditionally during Gradle configuration for
+// every task - including ones (like assembleFdroidRelease) that never actually use these values -
+// so this must not throw just because local.properties isn't there (e.g. on F-Droid's buildserver
+// or CI workflows that don't need this particular signingConfig/buildType).
+def readBuildProperty(String key) {
+	def envValue = System.getenv(key)
+	if (envValue != null) return envValue
+	def localPropsFile = project.rootProject.file('local.properties')
+	if (!localPropsFile.exists()) return null
+	Properties properties = new Properties()
+	properties.load(localPropsFile.newDataInputStream())
+	return properties.getProperty(key)
+}
+
 // Deliberately no `java { toolchain { languageVersion = ... } }` here: that forces Gradle to
 // find/provision an exact-version JDK to run javac with, which fails hard on environments that
 // only have a different JDK installed and can't auto-provision one (e.g. F-Droid's buildserver,
@@ -33,46 +47,16 @@ android {
 	signingConfigs {
 		nightly{
 			storeFile = file("keystore/nightly_keystore.jks")
-			storePassword System.getenv("SIGNING_STORE_PASSWORD")
-			if (storePassword == null) {
-				Properties properties = new Properties()
-				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-				storePassword = properties.getProperty('SIGNING_STORE_PASSWORD')
-			}
-			keyAlias System.getenv("SIGNING_KEY_ALIAS")
-			if (keyAlias == null) {
-				Properties properties = new Properties()
-				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-				keyAlias = properties.getProperty('SIGNING_KEY_ALIAS')
-			}
-			keyPassword System.getenv("SIGNING_KEY_PASSWORD")
-			if (keyPassword == null) {
-				Properties properties = new Properties()
-				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-				keyPassword = properties.getProperty('SIGNING_KEY_PASSWORD')
-			}
+			storePassword readBuildProperty('SIGNING_STORE_PASSWORD')
+			keyAlias readBuildProperty('SIGNING_KEY_ALIAS')
+			keyPassword readBuildProperty('SIGNING_KEY_PASSWORD')
 		}
 
 		release{
 			storeFile = file("keystore/release_keystore.jks")
-			storePassword System.getenv("RELEASE_SIGNING_STORE_PASSWORD")
-			if (storePassword == null) {
-				Properties properties = new Properties()
-				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-				storePassword = properties.getProperty('RELEASE_SIGNING_STORE_PASSWORD')
-			}
-			keyAlias System.getenv("RELEASE_SIGNING_KEY_ALIAS")
-			if (keyAlias == null) {
-				Properties properties = new Properties()
-				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-				keyAlias = properties.getProperty('RELEASE_SIGNING_KEY_ALIAS')
-			}
-			keyPassword System.getenv("RELEASE_SIGNING_KEY_PASSWORD")
-			if (keyPassword == null) {
-				Properties properties = new Properties()
-				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-				keyPassword = properties.getProperty('RELEASE_SIGNING_KEY_PASSWORD')
-			}
+			storePassword readBuildProperty('RELEASE_SIGNING_STORE_PASSWORD')
+			keyAlias readBuildProperty('RELEASE_SIGNING_KEY_ALIAS')
+			keyPassword readBuildProperty('RELEASE_SIGNING_KEY_PASSWORD')
 		}
 	}
 
@@ -92,13 +76,7 @@ android {
 			initWith release
 		}
 		nightly{
-			if(System.getenv("CURRENT_DATE") != null){
-				versionNameSuffix '-nightly+@' + System.getenv("CURRENT_DATE")
-			} else {
-				Properties properties = new Properties()
-				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-				versionNameSuffix '-nightly+@' + properties.getProperty('CURRENT_DATE')
-			}
+			versionNameSuffix '-nightly+@' + readBuildProperty('CURRENT_DATE')
 			applicationIdSuffix '.nightly'
 
 			signingConfig signingConfigs.nightly
