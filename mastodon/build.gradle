@@ -2,11 +2,12 @@ plugins {
 	id 'com.android.application'
 }
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-}
+// Deliberately no `java { toolchain { languageVersion = ... } }` here: that forces Gradle to
+// find/provision an exact-version JDK to run javac with, which fails hard on environments that
+// only have a different JDK installed and can't auto-provision one (e.g. F-Droid's buildserver,
+// which only has JDK 21 and disables toolchain auto-provisioning). compileOptions below already
+// pins the bytecode target to 17 without requiring the *running* JDK to be exactly 17 - any
+// reasonably recent JDK's javac can cross-compile down to that target.
 
 android {
 	compileSdk 35
