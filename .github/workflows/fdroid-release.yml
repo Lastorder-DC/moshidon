@@ -17,10 +17,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: set up JDK 17
+    # Must match the JDK version F-Droid's own buildserver uses (Debian trixie, JDK 21) exactly -
+    # javac output for the same source differs between JDK versions (verified empirically: JDK 17
+    # vs 21 produced different classes.dex from identical source), which breaks the Binaries
+    # reproducible-build comparison even though nothing in the app changed.
+    - name: set up JDK 21
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'corretto'
         cache: gradle
 
