@@ -47,7 +47,9 @@ jobs:
     # the Binaries reproducible-build signature-copy check even when all file contents are
     # otherwise byte-identical.
     - name: Install build-tools 31.0.0
-      run: sdkmanager --sdk_root="$ANDROID_HOME" "build-tools;31.0.0"
+      run: |
+        SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | sort -V | tail -1)
+        yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "build-tools;31.0.0"
 
     - name: Sign APK
       env:
