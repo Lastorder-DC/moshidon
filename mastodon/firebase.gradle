@@ -1,0 +1,37 @@
+// Firebase (FCM push, Crashlytics, Analytics) config - only linked into build variants that
+// should ship it (Play Store release + debug/nightly for testing), and only when a
+// google-services.json has actually been placed (see mastodon/build.gradle and the Firebase
+// setup guide). Kept in its own file so F-Droid's prebuild step can delete it outright,
+// keeping fdroidRelease's build.gradle itself free of any Firebase/Crashlytics references for
+// their static scanner - see mastodon/src/firebase/java for the bridge code.
+
+def firebaseVariants = ['debug', 'nightly', 'playRelease']
+// me.grishka.litex:* are lightweight forks of these exact AndroidX modules (same
+// packages/classes) used everywhere else in this app instead of the real thing - exclude
+// Firebase's transitive real-AndroidX copies of them to avoid duplicate class errors.
+def excludeLitexDupes = {
+	exclude group: 'androidx.collection', module: 'collection'
+	exclude group: 'androidx.concurrent', module: 'concurrent-futures'
+	exclude group: 'androidx.viewpager', module: 'viewpager'
+}
+dependencies {
+	firebaseVariants.each { variant ->
+		"${variant}Implementation" platform('com.google.firebase:firebase-bom:33.7.0')
+		"${variant}Implementation"('com.google.firebase:firebase-messaging', excludeLitexDupes)
+		"${variant}Implementation"('com.google.firebase:firebase-analytics', excludeLitexDupes)
+		"${variant}Implementation"('com.google.firebase:firebase-crashlytics', excludeLitexDupes)
+	}
+}
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
+// githubRelease/fdroidRelease share playRelease's applicationId, so without this the
+// Crashlytics plugin would try to upload a mapping file for them too even though they
+// have no Firebase dependency at all - and F-Droid's builder has no network access.
+android.buildTypes.githubRelease.firebaseCrashlytics {
+	mappingFileUploadEnabled = false
+}
+android.buildTypes.fdroidRelease.firebaseCrashlytics {
+	mappingFileUploadEnabled = false
+}

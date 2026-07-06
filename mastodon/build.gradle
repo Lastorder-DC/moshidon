@@ -184,43 +184,12 @@ dependencies {
 	androidTestImplementation 'androidx.test.ext:junit:1.1.5'
 	androidTestImplementation 'androidx.test:runner:1.5.2'
 	androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-	// Firebase (FCM push, Crashlytics, Analytics) - only linked into build variants that
-	// should ship it (Play Store release + debug/nightly for testing). Deliberately excluded
-	// from fdroidRelease/githubRelease. See mastodon/src/firebase/java for the bridge code
-	// and the guide for how to add your own google-services.json.
-	def firebaseVariants = ['debug', 'nightly', 'playRelease']
-	// me.grishka.litex:* are lightweight forks of these exact AndroidX modules (same
-	// packages/classes) used everywhere else in this app instead of the real thing - exclude
-	// Firebase's transitive real-AndroidX copies of them to avoid duplicate class errors.
-	def excludeLitexDupes = {
-		exclude group: 'androidx.collection', module: 'collection'
-		exclude group: 'androidx.concurrent', module: 'concurrent-futures'
-		exclude group: 'androidx.viewpager', module: 'viewpager'
-	}
-	firebaseVariants.each { variant ->
-		"${variant}Implementation" platform('com.google.firebase:firebase-bom:33.7.0')
-		"${variant}Implementation"('com.google.firebase:firebase-messaging', excludeLitexDupes)
-		"${variant}Implementation"('com.google.firebase:firebase-analytics', excludeLitexDupes)
-		"${variant}Implementation"('com.google.firebase:firebase-crashlytics', excludeLitexDupes)
-	}
 }
 
-// The google-services/crashlytics Gradle plugins hard-fail the whole build if
-// google-services.json is missing, which would break every variant (including
-// fdroid/github builds that should never need it) on a fresh checkout. Only apply them
-// when the file has actually been placed - see the Firebase setup guide.
-if (file("google-services.json").exists()) {
-	apply plugin: 'com.google.gms.google-services'
-	apply plugin: 'com.google.firebase.crashlytics'
-
-	// githubRelease/fdroidRelease share playRelease's applicationId, so without this the
-	// Crashlytics plugin would try to upload a mapping file for them too even though they
-	// have no Firebase dependency at all - and F-Droid's builder has no network access.
-	android.buildTypes.githubRelease.firebaseCrashlytics {
-		mappingFileUploadEnabled = false
-	}
-	android.buildTypes.fdroidRelease.firebaseCrashlytics {
-		mappingFileUploadEnabled = false
-	}
+// Only applied when a google-services.json has actually been placed - see the setup guide.
+// Deliberately conditional: the Gradle plugins applied from that file hard-fail the whole
+// build if google-services.json is missing, which would break every variant (including
+// fdroid/github builds that should never need it) on a fresh checkout.
+if (file("google-services.json").exists() && file("firebase.gradle").exists()) {
+	apply from: 'firebase.gradle'
 }
