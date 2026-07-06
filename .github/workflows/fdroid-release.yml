@@ -40,14 +40,22 @@ jobs:
     - name: Decode release keystore
       run: echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > release_keystore.jks
 
+    # Pinned to the exact build-tools version F-Droid's buildserver installs
+    # (sdkmanager "build-tools;31.0.0") rather than "whatever's newest on this runner" - verified
+    # locally that newer apksigner (34+) adds a zipalign padding extra field to STORED entries
+    # (e.g. PNGs) that 31.0.0 does not, which shifts every following entry's offset and breaks
+    # the Binaries reproducible-build signature-copy check even when all file contents are
+    # otherwise byte-identical.
+    - name: Install build-tools 31.0.0
+      run: sdkmanager --sdk_root="$ANDROID_HOME" "build-tools;31.0.0"
+
     - name: Sign APK
       env:
         RELEASE_SIGNING_STORE_PASSWORD: ${{ secrets.RELEASE_SIGNING_STORE_PASSWORD }}
         RELEASE_SIGNING_KEY_ALIAS: ${{ secrets.RELEASE_SIGNING_KEY_ALIAS }}
         RELEASE_SIGNING_KEY_PASSWORD: ${{ secrets.RELEASE_SIGNING_KEY_PASSWORD }}
       run: |
-        BUILD_TOOLS_VERSION=$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)
-        APKSIGNER="$ANDROID_HOME/build-tools/$BUILD_TOOLS_VERSION/apksigner"
+        APKSIGNER="$ANDROID_HOME/build-tools/31.0.0/apksigner"
         "$APKSIGNER" sign \
           --ks release_keystore.jks \
           --ks-pass env:RELEASE_SIGNING_STORE_PASSWORD \
