@@ -1,1 +1,1 @@
-A Mastodon client built specifically for the occm (자커마스) server
+A Mastodon client built specifically for the occm server

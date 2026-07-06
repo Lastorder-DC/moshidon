@@ -1,4 +1,4 @@
-occm is a dedicated Mastodon client built to make using the occm (자커마스) server as smooth as possible.
+occm is a dedicated Mastodon client built to make using the occm server as smooth as possible.
 
 Log in directly with your occm account and enjoy the core Mastodon experience - home timeline, notifications, posting, replies, boosts, favorites, and custom emoji - without any extra setup.
 
