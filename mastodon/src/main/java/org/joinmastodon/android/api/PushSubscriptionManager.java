@@ -94,33 +94,65 @@ public class PushSubscriptionManager{
 	}
 
 	public static void tryRegisterFCM(){
-		// This build's push relay (app.joinmastodon.org/relay-to/fcm) belongs to Mastodon gGmbH's
-		// own Firebase project, which doesn't recognize this fork's applicationId - so a token from
-		// it can never actually be delivered through. Push here works only through UnifiedPush
-		// (see UnifiedPushHelper / SettingsNotificationsFragment), so don't bother requesting one.
-		Log.d(TAG, "tryRegisterFCM: skipped, this build only supports UnifiedPush");
+		// Firebase (google-services) is only linked into build variants that ship a
+		// google-services.json (see mastodon/build.gradle) - reach it through the
+		// FcmInitializer bridge class so this file (shared by every variant, including
+		// fdroid/github builds that never have Firebase on their classpath) doesn't need
+		// to reference Firebase types directly.
+		if(BuildConfig.BUILD_TYPE.equals("fdroidRelease")){
+			Log.d(TAG, "tryRegisterFCM: skipped, fdroid build has no Google Play services/Firebase");
+			return;
+		}
+		try{
+			Class<?> initializer=Class.forName("org.joinmastodon.android.push.FcmInitializer");
+			initializer.getMethod("requestToken").invoke(null);
+		}catch(ClassNotFoundException x){
+			Log.d(TAG, "tryRegisterFCM: Firebase isn't included in this build variant");
+		}catch(Exception x){
+			Log.w(TAG, "tryRegisterFCM: failed to request an FCM token", x);
+		}
+	}
+
+	/** Called by FcmInitializer/the FirebaseMessagingService (in build variants that have them) once a token is available. */
+	public static void onNewFcmToken(String token){
+		deviceToken=token;
+		getPrefs().edit().putString("deviceToken", deviceToken).putInt("version", BuildConfig.VERSION_CODE).apply();
+		Log.i(TAG, "Successfully obtained FCM token");
+		registerAllAccountsForPush(true);
 	}
 
 	private static SharedPreferences getPrefs(){
 		return MastodonApp.context.getSharedPreferences("push", Context.MODE_PRIVATE);
 	}
 
+	private static String getDeviceToken(){
+		if(TextUtils.isEmpty(deviceToken))
+			deviceToken=getPrefs().getString("deviceToken", null);
+		return deviceToken;
+	}
+
 	public static boolean arePushNotificationsAvailable(){
-		return !TextUtils.isEmpty(deviceToken);
+		return !TextUtils.isEmpty(getDeviceToken());
 	}
 
 
+	// A made-up host under our own domain, NOT a real endpoint that anything is listening on.
+	// A native FCM token can't be reached with standard Web Push (see the FCM v1 migration),
+	// so the server (Fcm::MessageSender) special-cases this prefix and sends through the FCM
+	// v1 API instead of ever actually issuing a request to this URL. It deliberately isn't
+	// "fcm.googleapis.com/fcm/send/<token>" - that's also the literal endpoint format Chrome's
+	// own Web Push (via FCM) uses for browser subscriptions, so reusing it here would make the
+	// server unable to tell our native app's subscriptions apart from real browser ones.
+	private static final String FCM_NATIVE_ENDPOINT_PREFIX = "https://native-fcm.occm.cc/";
+
 	public void registerAccountForPush(PushSubscription subscription){
-		// this function is used for registering push notifications using FCM.
-		// deviceToken is always empty in this fork now (see tryRegisterFCM), so this
-		// always falls through to the skip branch below - kept as-is since it's harmless
-		// dead weight and matches upstream Moshidon's structure if this ever needs reverting.
-		if(BuildConfig.BUILD_TYPE.equals("fdroidRelease") || TextUtils.isEmpty(deviceToken)){
+		String token=getDeviceToken();
+		if(BuildConfig.BUILD_TYPE.equals("fdroidRelease") || TextUtils.isEmpty(token)){
 			Log.d(TAG, "Skipping registering for FCM push notifications");
 			return;
 		}
 
-		String endpoint = "https://app.joinmastodon.org/relay-to/fcm/"+deviceToken+"/";
+		String endpoint = FCM_NATIVE_ENDPOINT_PREFIX+token;
 		registerAccountForPush(subscription, endpoint);
 	}
 

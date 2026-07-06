@@ -13,6 +13,13 @@
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
+	<!-- We only use Firebase Analytics for basic install/session/login counts, not ad
+	     attribution - firebase-analytics pulls these in on its own, so remove them.
+	     (AD_ID is the pre-Android-13 permission, ACCESS_ADSERVICES_AD_ID the Android 13+
+	     Privacy Sandbox equivalent - both get added transitively, so both must be removed.) -->
+	<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+	<uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" tools:node="remove"/>
+
 	<permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
 	<uses-feature
 		android:name="android.hardware.camera"
@@ -39,6 +46,10 @@
 		android:theme="@style/Theme.Mastodon.AutoLightDark"
 		android:windowSoftInputMode="adjustPan"
 		android:largeHeap="true">
+
+		<!-- We only use Firebase Analytics for basic install/session/login counts, not ad
+		     attribution - no-ops on variants without Firebase, harmless either way. -->
+		<meta-data android:name="google_analytics_adid_collection_enabled" android:value="false"/>
 
 		<activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize" android:windowSoftInputMode="adjustResize" android:launchMode="singleTask">
 			<intent-filter>

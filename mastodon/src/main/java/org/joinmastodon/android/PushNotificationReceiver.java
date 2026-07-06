@@ -41,6 +41,7 @@ import org.joinmastodon.android.model.StatusPrivacy;
 import org.joinmastodon.android.ui.utils.UiUtils;
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -162,6 +163,49 @@ public class PushNotificationReceiver extends BroadcastReceiver{
 			}else{
 				Log.e(TAG, "onReceive: Failed to load notification");
 			}
+		}
+	}
+
+	/**
+	 * Entry point for our own FCM messaging service. The server (Fcm::MessageSender) sends a
+	 * plain data message with the notification JSON plus which local account it's for, since
+	 * FCM data messages aren't tied to a specific account the way a Web Push subscription is.
+	 */
+	public static void handleFcmPush(Context context, String accountID, String rawJson){
+		AccountSession account=AccountSessionManager.getInstance().tryGetAccount(accountID);
+		if(account==null){
+			Log.w(TAG, "handleFcmPush: no logged-in account matching "+accountID);
+			return;
+		}
+		if(account.getLocalPreferences().getNotificationsPauseEndTime()>System.currentTimeMillis()){
+			Log.i(TAG, "handleFcmPush: dropping notification because user has paused notifications for this account");
+			return;
+		}
+
+		PushNotification pn=MastodonAPIController.gson.fromJson(rawJson, PushNotification.class);
+		try{
+			pn.postprocess();
+		}catch(IOException x){
+			Log.w(TAG, "handleFcmPush: failed to postprocess notification", x);
+			return;
+		}
+
+		if(pn.isDm){
+			MastodonAPIController.runInBackground(()->new PushNotificationReceiver().notify(context, pn, accountID, null));
+		}else{
+			new GetNotificationByID(pn.notificationId)
+					.setCallback(new Callback<>(){
+						@Override
+						public void onSuccess(org.joinmastodon.android.model.Notification result){
+							MastodonAPIController.runInBackground(()->new PushNotificationReceiver().notify(context, pn, accountID, result));
+						}
+
+						@Override
+						public void onError(ErrorResponse error){
+							MastodonAPIController.runInBackground(()->new PushNotificationReceiver().notify(context, pn, accountID, null));
+						}
+					})
+					.exec(accountID);
 		}
 	}
 

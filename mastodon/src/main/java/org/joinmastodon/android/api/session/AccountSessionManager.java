@@ -21,6 +21,7 @@ import org.joinmastodon.android.MastodonApp;
 import org.joinmastodon.android.R;
 import org.joinmastodon.android.api.MastodonAPIController;
 import org.joinmastodon.android.api.PushSubscriptionManager;
+import org.joinmastodon.android.analytics.AnalyticsHelper;
 import org.joinmastodon.android.api.requests.filters.GetLegacyFilters;
 import org.joinmastodon.android.api.requests.instance.GetCustomEmojis;
 import org.joinmastodon.android.api.requests.accounts.GetOwnAccount;
@@ -120,6 +121,7 @@ public class AccountSessionManager{
 		sessions.put(session.getID(), session);
 		lastActiveAccountID=session.getID();
 		writeAccountsFile();
+		AnalyticsHelper.logLogin(context);
 
 		// write initial instance info to file immediately to avoid sessions without instance info
 		InstanceInfoStorageWrapper wrapper = new InstanceInfoStorageWrapper();

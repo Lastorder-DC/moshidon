@@ -9,15 +9,15 @@ java {
 }
 
 android {
-	compileSdk 33
+	compileSdk 35
 	defaultConfig {
 		manifestPlaceholders = [oAuthScheme:"occm-android-auth"]
 		archivesBaseName = "occm"
 		applicationId "cc.occm.app"
 		minSdk 23
-		targetSdk 34
-		versionCode 110
-		versionName "2.3.0+fork.110.occmdm"
+		targetSdk 35
+		versionCode 113
+		versionName "2.3.0+fork.113.occmdm"
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations += ['ar-rSA', 'ar-rDZ', 'be-rBY', 'bn-rBD', 'bs-rBA', 'ca-rES', 'cs-rCZ', 'da-rDK', 'de-rDE', 'el-rGR', 'es-rES', 'eu-rES', 'fa-rIR', 'fi-rFI', 'fil-rPH', 'fr-rFR', 'ga-rIE', 'gd-rGB', 'gl-rES', 'hi-rIN', 'hr-rHR', 'hu-rHU', 'hy-rAM', 'ig-rNG', 'in-rID', 'is-rIS', 'it-rIT', 'iw-rIL', 'ja-rJP', 'kab', 'ko-rKR', 'my-rMM', 'nl-rNL', 'no-rNO', 'oc-rFR', 'pl-rPL', 'pt-rBR', 'pt-rPT', 'ro-rRO', 'ru-rRU', 'si-rLK', 'sl-rSI', 'sv-rSE', 'th-rTH', 'tr-rTR', 'uk-rUA', 'ur-rIN', 'vi-rVN', 'zh-rCN', 'zh-rTW']
     }
@@ -52,27 +52,27 @@ android {
 			}
 		}
 
-//		release{
-//			storeFile = file("keystore/release_keystore.jks")
-//			storePassword System.getenv("RELEASE_SIGNING_STORE_PASSWORD")
-//			if (storePassword == null) {
-//				Properties properties = new Properties()
-//				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//				storePassword = properties.getProperty('RELEASE_SIGNING_STORE_PASSWORD')
-//			}
-//			keyAlias System.getenv("RELEASE_SIGNING_KEY_ALIAS")
-//			if (keyAlias == null) {
-//				Properties properties = new Properties()
-//				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//				keyAlias = properties.getProperty('RELEASE_SIGNING_KEY_ALIAS')
-//			}
-//			keyPassword System.getenv("RELEASE_SIGNING_KEY_PASSWORD")
-//			if (keyPassword == null) {
-//				Properties properties = new Properties()
-//				properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//				keyPassword = properties.getProperty('RELEASE_SIGNING_KEY_PASSWORD')
-//			}
-//		}
+		release{
+			storeFile = file("keystore/release_keystore.jks")
+			storePassword System.getenv("RELEASE_SIGNING_STORE_PASSWORD")
+			if (storePassword == null) {
+				Properties properties = new Properties()
+				properties.load(project.rootProject.file('local.properties').newDataInputStream())
+				storePassword = properties.getProperty('RELEASE_SIGNING_STORE_PASSWORD')
+			}
+			keyAlias System.getenv("RELEASE_SIGNING_KEY_ALIAS")
+			if (keyAlias == null) {
+				Properties properties = new Properties()
+				properties.load(project.rootProject.file('local.properties').newDataInputStream())
+				keyAlias = properties.getProperty('RELEASE_SIGNING_KEY_ALIAS')
+			}
+			keyPassword System.getenv("RELEASE_SIGNING_KEY_PASSWORD")
+			if (keyPassword == null) {
+				Properties properties = new Properties()
+				properties.load(project.rootProject.file('local.properties').newDataInputStream())
+				keyPassword = properties.getProperty('RELEASE_SIGNING_KEY_PASSWORD')
+			}
+		}
 	}
 
 	buildTypes {
@@ -108,6 +108,7 @@ android {
 			minifyEnabled true
 			shrinkResources true
 			versionNameSuffix '-play'
+			signingConfig signingConfigs.release
 		}
 		githubRelease {
 			initWith release
@@ -132,6 +133,13 @@ android {
 		}
 		debug {
 			setRoot "src/debug"
+			java.srcDirs += ["src/firebase/java"]
+		}
+		nightly {
+			java.srcDirs += ["src/firebase/java"]
+		}
+		playRelease {
+			java.srcDirs += ["src/firebase/java"]
 		}
 	}
 	namespace 'org.joinmastodon.android'
@@ -150,7 +158,12 @@ dependencies {
 	implementation 'com.squareup.okhttp3:okhttp:3.14.9'
 	implementation 'me.grishka.litex:recyclerview:1.2.1.1'
 	implementation 'me.grishka.litex:swiperefreshlayout:1.1.0.1'
-	implementation 'me.grishka.litex:browser:1.4.0'
+	implementation('me.grishka.litex:browser:1.4.0') {
+		// Firebase (real com.google.guava:guava) and this both ship
+		// com.google.common.util.concurrent.ListenableFuture et al. - drop litex's copy so
+		// there's only one on the classpath; guava's is a superset and API-compatible.
+		exclude group: 'me.grishka.litex', module: 'concurrent'
+	}
 	implementation 'me.grishka.litex:dynamicanimation:1.1.0-alpha03'
 	implementation 'me.grishka.litex:viewpager:1.0.0'
 	implementation 'me.grishka.litex:viewpager2:1.0.0'
@@ -170,4 +183,43 @@ dependencies {
 	androidTestImplementation 'androidx.test.ext:junit:1.1.5'
 	androidTestImplementation 'androidx.test:runner:1.5.2'
 	androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+	// Firebase (FCM push, Crashlytics, Analytics) - only linked into build variants that
+	// should ship it (Play Store release + debug/nightly for testing). Deliberately excluded
+	// from fdroidRelease/githubRelease. See mastodon/src/firebase/java for the bridge code
+	// and the guide for how to add your own google-services.json.
+	def firebaseVariants = ['debug', 'nightly', 'playRelease']
+	// me.grishka.litex:* are lightweight forks of these exact AndroidX modules (same
+	// packages/classes) used everywhere else in this app instead of the real thing - exclude
+	// Firebase's transitive real-AndroidX copies of them to avoid duplicate class errors.
+	def excludeLitexDupes = {
+		exclude group: 'androidx.collection', module: 'collection'
+		exclude group: 'androidx.concurrent', module: 'concurrent-futures'
+		exclude group: 'androidx.viewpager', module: 'viewpager'
+	}
+	firebaseVariants.each { variant ->
+		"${variant}Implementation" platform('com.google.firebase:firebase-bom:33.7.0')
+		"${variant}Implementation"('com.google.firebase:firebase-messaging', excludeLitexDupes)
+		"${variant}Implementation"('com.google.firebase:firebase-analytics', excludeLitexDupes)
+		"${variant}Implementation"('com.google.firebase:firebase-crashlytics', excludeLitexDupes)
+	}
+}
+
+// The google-services/crashlytics Gradle plugins hard-fail the whole build if
+// google-services.json is missing, which would break every variant (including
+// fdroid/github builds that should never need it) on a fresh checkout. Only apply them
+// when the file has actually been placed - see the Firebase setup guide.
+if (file("google-services.json").exists()) {
+	apply plugin: 'com.google.gms.google-services'
+	apply plugin: 'com.google.firebase.crashlytics'
+
+	// githubRelease/fdroidRelease share playRelease's applicationId, so without this the
+	// Crashlytics plugin would try to upload a mapping file for them too even though they
+	// have no Firebase dependency at all - and F-Droid's builder has no network access.
+	android.buildTypes.githubRelease.firebaseCrashlytics {
+		mappingFileUploadEnabled = false
+	}
+	android.buildTypes.fdroidRelease.firebaseCrashlytics {
+		mappingFileUploadEnabled = false
+	}
 }
