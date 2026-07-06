@@ -1,0 +1,59 @@
+name: F-Droid release build
+
+on:
+  push:
+    tags:
+      - '*.occmdm'
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'corretto'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build fdroidRelease APK
+      run: ./gradlew assembleFdroidRelease
+
+    - name: Decode release keystore
+      run: echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > release_keystore.jks
+
+    - name: Sign APK
+      env:
+        RELEASE_SIGNING_STORE_PASSWORD: ${{ secrets.RELEASE_SIGNING_STORE_PASSWORD }}
+        RELEASE_SIGNING_KEY_ALIAS: ${{ secrets.RELEASE_SIGNING_KEY_ALIAS }}
+        RELEASE_SIGNING_KEY_PASSWORD: ${{ secrets.RELEASE_SIGNING_KEY_PASSWORD }}
+      run: |
+        BUILD_TOOLS_VERSION=$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)
+        APKSIGNER="$ANDROID_HOME/build-tools/$BUILD_TOOLS_VERSION/apksigner"
+        "$APKSIGNER" sign \
+          --ks release_keystore.jks \
+          --ks-pass env:RELEASE_SIGNING_STORE_PASSWORD \
+          --ks-key-alias "$RELEASE_SIGNING_KEY_ALIAS" \
+          --key-pass env:RELEASE_SIGNING_KEY_PASSWORD \
+          --out occm-fdroidRelease.apk \
+          mastodon/build/outputs/apk/fdroidRelease/occm-fdroidRelease-unsigned.apk
+        rm -f release_keystore.jks
+
+    # Filename must match the fdroiddata metadata's Binaries: URL
+    # (https://github.com/Lastorder-DC/moshidon/releases/download/%v/occm-fdroidRelease.apk)
+    # so F-Droid's reproducible-build verification can find and compare it.
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: occm-fdroidRelease.apk
