@@ -17,16 +17,19 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    # Must match the JDK version F-Droid's own buildserver uses (Debian trixie, JDK 21) exactly -
-    # javac output for the same source differs between JDK versions (verified empirically: JDK 17
-    # vs 21 produced different classes.dex from identical source), which breaks the Binaries
-    # reproducible-build comparison even though nothing in the app changed.
-    - name: set up JDK 21
-      uses: actions/setup-java@v3
-      with:
-        java-version: '21'
-        distribution: 'corretto'
-        cache: gradle
+    # Must match the exact JDK F-Droid's own buildserver uses (Debian trixie's own
+    # openjdk-21-jdk-headless package via apt), not just the same version number - verified that
+    # JDK 17 vs 21 alone produced different classes.dex from identical source (that's fixed), but
+    # matching only the version and not the vendor/package can still leave subtle differences
+    # (e.g. zip/deflate output) that break the Binaries reproducible-build comparison even when
+    # the actual compiled code is identical. ubuntu-latest runners share Debian's apt ecosystem,
+    # so this installs the literal same package instead of Amazon's Corretto build.
+    - name: Install JDK 21 (matches F-Droid's buildserver exactly)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-21-jdk-headless
+        sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+        echo "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64" >> "$GITHUB_ENV"
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
