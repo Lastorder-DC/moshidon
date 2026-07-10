@@ -1,4 +1,0 @@
-- Added toggle for enhanced text size
-- Better unifiedPush support
-- Improvements to Iceshrimp by Jacocococo
-- A bunch of small fixes and improvements

@@ -1,2 +1,0 @@
-- Un montón de fallos arreglados
-- Mejoras y corrección de errores leves

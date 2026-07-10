@@ -1,2 +1,0 @@
-- Fix timeline loading on some more up to date mastodon servers
-- Small fixes and improvements

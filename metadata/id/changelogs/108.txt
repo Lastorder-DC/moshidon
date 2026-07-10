@@ -1,2 +1,0 @@
-- Memperbaiki banyak kemogokan
-- Perbaikan bug dan peningkatan kecil
