@@ -1,3 +1,0 @@
-- Yukarı akış birleştirildi (2.3.0)
-- Durum geçmişi için uzaktan alma eklendi
-- Bir sürü hata düzeltildi

@@ -1,1 +1,0 @@
-Artık yayınla düğmesini daha erişilebilir bir konuma getirmek için isteğe bağlı bir geçiş ekliyoruz! Artık varsayılan bu!

@@ -1,2 +1,0 @@
-- Doğrudan resim görüntüleyicisinden paylaşım etkinleştirildi (Artık paylaşmak için medyayı indirmeye gerek yok)
-- Birçok küçük hata düzeltmesi ve iyileştirme
