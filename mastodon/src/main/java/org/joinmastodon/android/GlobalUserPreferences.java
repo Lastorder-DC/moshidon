@@ -67,7 +67,7 @@ public class GlobalUserPreferences{
 	public static ColorPreference color;
 	public static boolean likeIcon;
 
-	// MOSHIDON
+	// MOSHIDON-OCCM
 	public static boolean showDividers;
 	public static boolean relocatePublishButton;
 	public static boolean defaultToUnlistedReplies;
@@ -147,7 +147,7 @@ public class GlobalUserPreferences{
 		color=ColorPreference.valueOf(prefs.getString("color", MATERIAL3.name()));
 		likeIcon=prefs.getBoolean("likeIcon", false);
 
-		// MOSHIDON
+		// MOSHIDON-OCCM
 		uniformNotificationIcon=prefs.getBoolean("uniformNotificationIcon", false);
 		showDividers =prefs.getBoolean("showDividers", false);
 		relocatePublishButton=prefs.getBoolean("relocatePublishButton", true);
@@ -221,7 +221,7 @@ public class GlobalUserPreferences{
 				.putString("color", color.name())
 				.putBoolean("likeIcon", likeIcon)
 
-				// MOSHIDON
+				// MOSHIDON-OCCM
 				.putBoolean("defaultToUnlistedReplies", defaultToUnlistedReplies)
 				.putBoolean("doubleTapToSearch", doubleTapToSearch)
 				.putBoolean("doubleTapToSwipe", doubleTapToSwipe)

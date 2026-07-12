@@ -8,9 +8,9 @@
     <string name="mo_personal_note">Adicionar nota sobre este perfil</string>
     <string name="mo_personal_note_confirm">Confirmar mudanças na nota</string>
     <string name="mo_personal_note_update_failed">Falha em salvar nota</string>
-    <string name="mo_settings_contribute">Contribua para o Moshidon</string>
-    <string name="mo_update_available">Moshidon %s está pronto para baixar.</string>
-    <string name="mo_update_ready">Moshidon %s está baixado e pronto para instalar.</string>
+    <string name="mo_settings_contribute">Contribua para o OCCM</string>
+    <string name="mo_update_available">OCCM %s está pronto para baixar.</string>
+    <string name="mo_update_ready">OCCM %s está baixado e pronto para instalar.</string>
     <string name="mo_no_image_desc_title">Nenhuma descrição de imagem</string>
     <string name="mo_no_image_desc">As imagens incluídas não possuem descrição. Por favor considere adicionar uma, para permitir que as pessoas visualmente deficientes participem.</string>
     <string name="mo_emoji_recent">Usado recentemente</string>

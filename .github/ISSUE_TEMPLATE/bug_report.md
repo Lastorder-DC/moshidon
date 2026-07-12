@@ -25,7 +25,7 @@ Does this issue also occur with the respective upstream release?
 > No / Yes
 
 > In case it does, please consider filing an [upstream bug report](https://github.com/mastodon/mastodon-android/issues) instead.
-> If this bug is seriously impacting your usage or you think I might want to try to fix it for Moshidon, feel free to still create this issue!
+> If this bug is seriously impacting your usage or you think I might want to try to fix it for OCCM, feel free to still create this issue!
 
 **Screenshots and screen recordings**
 
@@ -33,7 +33,7 @@ If applicable, add screenshots (and screen recordings, if possible) to help expl
 
 **Version**
 
-Moshidon version: [e.g. v1.1.4+fork.#]
+OCCM version: [e.g. v1.1.4+fork.#]
 
 **Crash log**
 

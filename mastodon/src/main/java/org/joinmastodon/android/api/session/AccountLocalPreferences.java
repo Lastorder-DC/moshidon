@@ -58,7 +58,7 @@ public class AccountLocalPreferences{
 	private final static Type timelinesType=new TypeToken<ArrayList<TimelineDefinition>>() {}.getType();
 	private final static Type recentCustomEmojiType=new TypeToken<ArrayList<Emoji>>() {}.getType();
 
-	// MOSHIDON
+	// MOSHIDON-OCCM
 //	private final static Type recentEmojisType = new TypeToken<Map<String, Integer>>() {}.getType();
 //	public Map<String, Integer> recentEmojis;
 	private final static Type notificationFiltersType = new TypeToken<PushSubscription.Alerts>() {}.getType();
@@ -92,7 +92,7 @@ public class AccountLocalPreferences{
 		color=prefs.contains("color") ? ColorPreference.valueOf(prefs.getString("color", null)) : null;
 		recentCustomEmoji=fromJson(prefs.getString("recentCustomEmoji", null), recentCustomEmojiType, new ArrayList<>());
 
-		// MOSHIDON
+		// MOSHIDON-OCCM
 //		recentEmojis=fromJson(prefs.getString("recentEmojis", "{}"), recentEmojisType, new HashMap<>());
 		notificationFilters=fromJson(prefs.getString("notificationFilters", gson.toJson(PushSubscription.Alerts.ofAll())), notificationFiltersType, PushSubscription.Alerts.ofAll());
 	}
@@ -138,7 +138,7 @@ public class AccountLocalPreferences{
 				.putString("color", color!=null ? color.name() : null)
 				.putString("recentCustomEmoji", gson.toJson(recentCustomEmoji))
 
-				// MOSHIDON
+				// MOSHIDON-OCCM
 //				.putString("recentEmojis", gson.toJson(recentEmojis))
 				.putString("notificationFilters", gson.toJson(notificationFilters))
 				.apply();

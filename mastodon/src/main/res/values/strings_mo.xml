@@ -13,15 +13,15 @@
     <string name="mo_welcome_text">To get started, please enter your home instance’s domain name below.</string>
 
     <!--    Setting this as non-translatable as it simply doesn't change with language-->
-    <string name="mo_settings_app_version" translatable="false">Moshidon v%1$s (%2$d)</string>
+    <string name="mo_settings_app_version" translatable="false">OCCM v%1$s (%2$d)</string>
 
     <string name="mo_personal_note">Add a note about this profile</string>
 	<string name="mo_personal_note_saved">Note saved</string>
     <string name="mo_personal_note_confirm">Confirm changes to note</string>
     <string name="mo_personal_note_update_failed">Failed to save note</string>
-    <string name="mo_settings_contribute">Contribute to 자커마스</string>
-    <string name="mo_update_available">Moshidon %s is ready to download.</string>
-    <string name="mo_update_ready">Moshidon %s is downloaded and ready to install.</string>
+    <string name="mo_settings_contribute">Contribute to OCCM</string>
+    <string name="mo_update_available">OCCM %s is ready to download.</string>
+    <string name="mo_update_ready">OCCM %s is downloaded and ready to install.</string>
     <string name="mo_no_image_desc_title">No Image description</string>
     <string name="mo_no_image_desc">The included images have no description. Please consider adding one, to allow visually impaired people to participate.</string>
     <string name="mo_emoji_recent">Recently used</string>
