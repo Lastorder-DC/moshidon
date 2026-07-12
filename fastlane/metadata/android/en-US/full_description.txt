@@ -1,12 +1,11 @@
-occm is a dedicated Mastodon client built to make using the occm server as smooth as possible.
+OCCM is a dedicated Mastodon client built to make using the occm server as smooth as possible. This app is a fork of the Mastodon app Moshidon.
 
-Log in directly with your occm account and enjoy the core Mastodon experience - home timeline, notifications, posting, replies, boosts, favorites, and custom emoji - without any extra setup.
+■ Key features
 
-Key features:
+- Custom DM (Individual/Group) Integration: Fully integrated with the occm server's custom direct message (individual and group) feature. New messages appear instantly without the need to refresh, and avatars and custom emojis render smoothly.
+- Pending Mentions Integration: Fully integrated with occm's unique "pending mentions" feature, allowing you to easily track and manage replies so you never miss a conversation.
 
-- Quick login: sign in with your occm account in just a few taps and start browsing right away.
-- Full SNS features: home timeline, notifications, search, and profiles, plus posting, replies, boosts, favorites, and custom emoji, all working smoothly.
-- Fast DM access: the direct message screen has been tuned for quick back-and-forth conversations. New messages show up right away without needing to refresh, and avatars and custom emoji render smoothly in the conversation.
-- Tuned for occm: unlike general-purpose Mastodon apps, this client is adjusted specifically for the occm server, so it integrates more reliably with its behavior.
+■ Contact & Support
 
-If you're an occm user, this app lets you go from checking your timeline to chatting in real time, all in one place.
+- Mastodon: @notice@occm.cc
+- GitHub: Leave an Issue here - https://github.com/Lastorder-DC/moshidon
