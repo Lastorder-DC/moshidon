@@ -33,6 +33,7 @@ import org.joinmastodon.android.fragments.BaseStatusListFragment;
 import org.joinmastodon.android.fragments.ComposeFragment;
 import org.joinmastodon.android.fragments.ListsFragment;
 import org.joinmastodon.android.fragments.NotificationsListFragment;
+import org.joinmastodon.android.fragments.PendingMentionsListFragment;
 import org.joinmastodon.android.fragments.ProfileFragment;
 import org.joinmastodon.android.fragments.ThreadFragment;
 import org.joinmastodon.android.fragments.report.ReportReasonChoiceFragment;
@@ -290,6 +291,10 @@ public class HeaderStatusDisplayItem extends StatusDisplayItem{
 					Nav.go(item.parentFragment.getActivity(), ListsFragment.class, args);
 				}else if(id==R.id.share){
 					UiUtils.openSystemShareSheet(activity, item.status);
+				}else if(id==R.id.dismiss_pending_mention){
+					if(item.parentFragment instanceof PendingMentionsListFragment pendingMentionsFragment && item.notification!=null){
+						pendingMentionsFragment.dismissPendingMention(item.notification);
+					}
 				}else if(id==R.id.open_with_account){
 					UiUtils.pickAccount(item.parentFragment.getActivity(), item.accountID, R.string.sk_open_with_account, R.drawable.ic_fluent_person_swap_24_regular, session ->UiUtils.openURL(
 							item.parentFragment.getActivity(), session.getID(), item.status.url, false
@@ -493,6 +498,8 @@ public class HeaderStatusDisplayItem extends StatusDisplayItem{
 			Account account=item.user;
 			Menu menu=optionsMenu.getMenu();
 
+
+			menu.findItem(R.id.dismiss_pending_mention).setVisible(item.notification!=null && item.parentFragment instanceof PendingMentionsListFragment);
 
 			String username = account.getShortUsername();
 			boolean isOwnPost=AccountSessionManager.getInstance().isSelf(item.parentFragment.getAccountID(), account);

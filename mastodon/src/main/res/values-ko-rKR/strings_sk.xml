@@ -80,6 +80,8 @@
     <string name="sk_clear_all_notifications_confirm_action">모두 삭제</string>
     <string name="sk_settings_tabs_disable_swipe">스와이프로 탭간 전환 비활성화</string>
     <string name="sk_clear_all_notifications">모든 알림 삭제</string>
+    <string name="sk_pending_mentions">답장할 멘션</string>
+    <string name="sk_dismiss_pending_mention">무시</string>
     <string name="sk_loading_fediverse_resource_title">연합우주에서 찾아오는 중</string>
     <string name="sk_bookmark_as">다른 계정으로 보관</string>
     <string name="sk_reblog_as">다른 계정으로 부스트</string>

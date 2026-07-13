@@ -1,0 +1,1 @@
+Added an "Awaiting reply" tab to Notifications for occm's pending mentions feature, matching the web client. Dismiss a pending mention from the post's menu to remove it from the list.

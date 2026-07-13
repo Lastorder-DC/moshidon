@@ -28,6 +28,7 @@ import org.joinmastodon.android.api.session.AccountSessionManager;
 import org.joinmastodon.android.events.FollowRequestHandledEvent;
 import org.joinmastodon.android.model.Account;
 import org.joinmastodon.android.model.HeaderPaginationList;
+import org.joinmastodon.android.model.Notification;
 import org.joinmastodon.android.model.PushSubscription;
 import org.joinmastodon.android.ui.M3AlertDialogBuilder;
 import org.joinmastodon.android.ui.SimpleViewHolder;
@@ -60,6 +61,7 @@ public class NotificationsFragment extends MastodonToolbarFragment implements Sc
 	String unreadMarker, realUnreadMarker;
 	private MenuItem markAllReadItem, filterItem;
 	private NotificationsListFragment allNotificationsFragment, mentionsFragment;
+	private PendingMentionsListFragment pendingMentionsFragment;
 	private ElevationOnScrollListener elevationOnScrollListener;
 
 	private String accountID;
@@ -203,12 +205,13 @@ public class NotificationsFragment extends MastodonToolbarFragment implements Sc
 		pager=view.findViewById(R.id.pager);
 		UiUtils.reduceSwipeSensitivity(pager);
 
-		tabViews=new FrameLayout[2];
+		tabViews=new FrameLayout[3];
 		for(int i=0;i<tabViews.length;i++){
 			FrameLayout tabView=new FrameLayout(getActivity());
 			tabView.setId(switch(i){
 				case 0 -> R.id.notifications_all;
 				case 1 -> R.id.notifications_mentions;
+				case 2 -> R.id.notifications_pending_mentions;
 				default -> throw new IllegalStateException("Unexpected value: "+i);
 			});
 			tabView.setVisibility(View.GONE);
@@ -263,9 +266,16 @@ public class NotificationsFragment extends MastodonToolbarFragment implements Sc
 			mentionsFragment=new NotificationsListFragment();
 			mentionsFragment.setArguments(args);
 
+			args=new Bundle();
+			args.putString("account", accountID);
+			args.putBoolean("__is_tab", true);
+			pendingMentionsFragment=new PendingMentionsListFragment();
+			pendingMentionsFragment.setArguments(args);
+
 			getChildFragmentManager().beginTransaction()
 					.add(R.id.notifications_all, allNotificationsFragment)
 					.add(R.id.notifications_mentions, mentionsFragment)
+					.add(R.id.notifications_pending_mentions, pendingMentionsFragment)
 					.commit();
 		}
 
@@ -275,6 +285,7 @@ public class NotificationsFragment extends MastodonToolbarFragment implements Sc
 				tab.setText(switch(position){
 					case 0 -> R.string.all_notifications;
 					case 1 -> R.string.mentions;
+					case 2 -> R.string.sk_pending_mentions;
 					default -> throw new IllegalStateException("Unexpected value: "+position);
 				});
 			}
@@ -348,10 +359,11 @@ public class NotificationsFragment extends MastodonToolbarFragment implements Sc
 		getToolbar().setOnClickListener(v->scrollToTop());
 	}
 
-	private NotificationsListFragment getFragmentForPage(int page){
+	private BaseStatusListFragment<Notification> getFragmentForPage(int page){
 		return switch(page){
 			case 0 -> allNotificationsFragment;
 			case 1 -> mentionsFragment;
+			case 2 -> pendingMentionsFragment;
 			default -> throw new IllegalStateException("Unexpected value: "+page);
 		};
 	}
@@ -386,7 +398,7 @@ public class NotificationsFragment extends MastodonToolbarFragment implements Sc
 
 		@Override
 		public int getItemCount(){
-			return 2;
+			return 3;
 		}
 
 		@Override
